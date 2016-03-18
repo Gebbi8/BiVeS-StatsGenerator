@@ -1,30 +1,35 @@
 /**
  * 
  */
-package de.unirostock.sems.bives.statsgenerator;
+package de.unirostock.sems.bives.statsgenerator.algorithm;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.FileSystem;
 
 
+
+// TODO: Auto-generated Javadoc
 /**
- * @author Martin Scharm
+ * The Class Figurizer.
  *
+ * @author Martin Scharm
  */
 public class Figurizer
 {
+	
+	/** The Constant newLine. */
 	public final static String newLine = System.getProperty("line.separator");
 	
 	/**
-	 * @param args
-	 * @throws IOException 
-	 * @throws InterruptedException 
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws InterruptedException the interrupted exception
 	 */
 	public static void main (String[] args) throws IOException, InterruptedException
 	{
@@ -104,6 +109,14 @@ public class Figurizer
 		}
 	}
 	
+	/**
+	 * Do rbiomodels matrix.
+	 *
+	 * @param biomodelsDiffs the biomodels diffs
+	 * @param output the output
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws InterruptedException the interrupted exception
+	 */
 	private void doRbiomodelsMatrix (File biomodelsDiffs, File output) throws IOException, InterruptedException
 	{
 		File biomodelsR = new File (output.getAbsolutePath () + "/filescript-biomodels.R");
@@ -120,6 +133,18 @@ public class Figurizer
 	}
 	
 
+	/**
+	 * Do rfile stats.
+	 *
+	 * @param filestatsFileBiomodels the filestats file biomodels
+	 * @param filestatsFileBiomodelsCurated the filestats file biomodels curated
+	 * @param filestatsFileBiomodelsNonCurated the filestats file biomodels non curated
+	 * @param filestatsFileCellml the filestats file cellml
+	 * @param filestatsFileCellmlPerDate the filestats file cellml per date
+	 * @param fileResultsdir the file resultsdir
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws InterruptedException the interrupted exception
+	 */
 	private void doRfileStats (File filestatsFileBiomodels, File filestatsFileBiomodelsCurated, File filestatsFileBiomodelsNonCurated, File filestatsFileCellml, File filestatsFileCellmlPerDate, File fileResultsdir) throws IOException, InterruptedException
 	{
 		File biomodelsR = new File (fileResultsdir.getAbsolutePath () + "/filescript-biomodels.R");
@@ -177,6 +202,15 @@ public class Figurizer
     
 	}
 
+	/**
+	 * Do rdiff stats.
+	 *
+	 * @param targetRfile the target rfile
+	 * @param diffstatsFile the diffstats file
+	 * @param diffResultsdir the diff resultsdir
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws InterruptedException the interrupted exception
+	 */
 	private void doRdiffStats (File targetRfile, File diffstatsFile, File diffResultsdir) throws IOException, InterruptedException
 	{
 		BufferedWriter bw = new BufferedWriter (new FileWriter (targetRfile));
@@ -191,6 +225,14 @@ public class Figurizer
     p.waitFor();
 	}
 
+	/**
+	 * Split file stats.
+	 *
+	 * @param fileStats the file stats
+	 * @param targetDir the target dir
+	 * @param filePrefix the file prefix
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	private void splitFileStats (File fileStats, File targetDir, String filePrefix) throws IOException
 	{
 		BufferedWriter bwB = new BufferedWriter (new FileWriter (targetDir.getAbsolutePath () + "/" + filePrefix + "-biomodels"));
@@ -238,10 +280,21 @@ public class Figurizer
 	}
 	
 
+	/** The Constant TypeCellml. */
 	private static final int TypeCellml = 0;
+	
+	/** The Constant TypeBiomodelsC. */
 	private static final int TypeBiomodelsC = 1;
+	
+	/** The Constant TypeBiomodelsNc. */
 	private static final int TypeBiomodelsNc = -1;
 	
+	/**
+	 * Gets the type.
+	 *
+	 * @param line the line
+	 * @return the type
+	 */
 	private static final int getType (String line)
 	{
 		if (line.contains ("http"))

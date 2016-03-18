@@ -1,17 +1,15 @@
 /**
  * 
  */
-package de.unirostock.sems.bives.statsgenerator;
+package de.unirostock.sems.bives.statsgenerator.algorithm;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
@@ -20,21 +18,22 @@ import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
-import de.binfalse.bflog.LOGGER;
 
-
+// TODO: Auto-generated Javadoc
 /**
- * @author martin
+ * The Class BivesAuswertungImager.
  *
+ * @author martin
  */
 public class BivesAuswertungImager
 {
-	/*public static String WORKING = "/srv/modelcrawler/statswebsite/copy/workingdir";
-	public static String EVALUATING = "/home/martin/unisonSyncPrivate/education/dev/statswebsite/eval";*/
 	
 	/**
-	 * @param args
-	 * @throws IOException 
+	 * Run for novak.
+	 *
+	 * @param statsFile the stats file
+	 * @param outputDir the output dir
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	/*public static void main (String[] args) throws IOException
 	{
@@ -64,6 +63,12 @@ public class BivesAuswertungImager
 	}
 	
 	
+	/**
+	 * Run.
+	 *
+	 * @param statsFile the stats file
+	 * @param outputDir the output dir
+	 */
 	public static void run (File statsFile, File outputDir)
 	{
 
@@ -94,26 +99,56 @@ public class BivesAuswertungImager
 			}		
 	}
 	
+	/**
+	 * The Class Scale.
+	 */
 	static class Scale
 	{
+		
+		/** The scaler. */
 		double scaler;
+		
+		/**
+		 * Instantiates a new scale.
+		 *
+		 * @param scaler the scaler
+		 */
 		public Scale (double scaler)
 		{
 			this.scaler = scaler;
 		}
+		
+		/**
+		 * Scale.
+		 *
+		 * @param s the s
+		 * @return the int
+		 */
 		public int scale (double s)
 		{
 			return (int) Math.round (s / scaler);
 		}
 	}
 	
+	/**
+	 * The Class LogScale.
+	 */
 	static class LogScale extends Scale
 	{
+		
+		/**
+		 * Instantiates a new log scale.
+		 *
+		 * @param scaler the scaler
+		 */
 		public LogScale (double scaler)
 		{
 			super (scaler);
 		}
 		
+		/* (non-Javadoc)
+		 * @see de.unirostock.sems.bives.statsgenerator.algorithm.BivesAuswertungImager.Scale#scale(double)
+		 */
 		public int scale (double s)
 		{
 			if (s < 1)
@@ -121,6 +156,17 @@ public class BivesAuswertungImager
 			return (int)  Math.round (Math.log (s) * scaler);
 		}
 	}
+	
+	/**
+	 * Creates the image bives horizontally.
+	 *
+	 * @param findNovak the find novak
+	 * @param in the in
+	 * @param out the out
+	 * @param scale the scale
+	 * @param minOps the min ops
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	private static void createImageBivesHorizontally (boolean findNovak, File in, File out, Scale scale, int minOps) throws IOException
 	{
 		
@@ -343,6 +389,14 @@ System.out.println (width);
 	
 	
 	
+	/**
+	 * Sum.
+	 *
+	 * @param a the a
+	 * @param b the b
+	 * @param n the n
+	 * @return the double
+	 */
 	public static double sum (int a, int b, double [] n)
 	{
 		int s = 0;

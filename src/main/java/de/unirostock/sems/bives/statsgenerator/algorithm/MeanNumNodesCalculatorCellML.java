@@ -1,11 +1,10 @@
 /**
  * 
  */
-package de.unirostock.sems.bives.statsgenerator;
+package de.unirostock.sems.bives.statsgenerator.algorithm;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,18 +18,40 @@ import java.util.TreeSet;
 import de.binfalse.bflog.LOGGER;
 
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Martin Scharm
+ * The Class MeanNumNodesCalculatorCellML.
  *
+ * @author Martin Scharm
  */
 public class MeanNumNodesCalculatorCellML
 {
 
 
+	/**
+	 * The Class Line.
+	 */
 	public static class Line
 	{
+		
+		/** The revision. */
 		int nodes, components, variables, units, revision;
+		
+		/** The type. */
 		String date, file, type;
+		
+		/**
+		 * Instantiates a new line.
+		 *
+		 * @param nodes the nodes
+		 * @param components the components
+		 * @param variables the variables
+		 * @param units the units
+		 * @param date the date
+		 * @param file the file
+		 * @param revision the revision
+		 * @param type the type
+		 */
 		public Line (int nodes, int components, int variables, int units, String date, String file, int revision, String type)
 		{
 			super ();
@@ -45,21 +66,45 @@ public class MeanNumNodesCalculatorCellML
 		}
 	}
 	
+	/**
+	 * The Class File.
+	 */
 	public static class File
 	{
+		
+		/** The name. */
 		String name;
+		
+		/** The lines. */
 		List<Line> lines;
+		
+		/**
+		 * Instantiates a new file.
+		 *
+		 * @param name the name
+		 */
 		public File (String name)
 		{
 			this.name = name;
 			this.lines = new ArrayList<Line> ();
 		}
 		
+		/**
+		 * Adds the line.
+		 *
+		 * @param l the l
+		 */
 		public void addLine (Line l)
 		{
 			lines.add (l);
 		}
 
+		/**
+		 * Gets the lates before.
+		 *
+		 * @param date the date
+		 * @return the lates before
+		 */
 		public Line getLatesBefore (String date)
 		{
 			Line line = null;
@@ -75,8 +120,11 @@ public class MeanNumNodesCalculatorCellML
 	
 	
 	/**
-	 * @param args
-	 * @throws IOException 
+	 * Run.
+	 *
+	 * @param in the in
+	 * @param out the out
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public static void run (String in, String out) throws IOException
 	{
