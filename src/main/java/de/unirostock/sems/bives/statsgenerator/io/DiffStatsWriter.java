@@ -4,9 +4,7 @@
 package de.unirostock.sems.bives.statsgenerator.io;
 
 import java.io.IOException;
-import java.util.Date;
 
-import de.unirostock.sems.bives.statsgenerator.App;
 import de.unirostock.sems.bives.statsgenerator.ds.DiffResult;
 
 

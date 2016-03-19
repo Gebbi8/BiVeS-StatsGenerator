@@ -1,41 +1,14 @@
 package de.unirostock.sems.bives.statsgenerator;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileFilter;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.io.comparator.NameFileComparator;
-import org.apache.commons.io.filefilter.FileFileFilter;
-import org.jdom2.Element;
 
 import de.binfalse.bflog.LOGGER;
-import de.binfalse.bfutils.GeneralTools;
-import de.unirostock.sems.bives.algorithm.ModelValidator;
-import de.unirostock.sems.bives.api.Diff;
 import de.unirostock.sems.bives.cellml.algorithm.CellMLValidator;
-import de.unirostock.sems.bives.cellml.api.CellMLDiff;
-import de.unirostock.sems.bives.cellml.parser.CellMLComponent;
-import de.unirostock.sems.bives.cellml.parser.CellMLDocument;
-import de.unirostock.sems.bives.cellml.parser.CellMLModel;
-import de.unirostock.sems.bives.cellml.parser.CellMLUnitDictionary;
-import de.unirostock.sems.bives.ds.ModelDocument;
-import de.unirostock.sems.bives.ds.Patch;
 import de.unirostock.sems.bives.sbml.algorithm.SBMLValidator;
-import de.unirostock.sems.bives.sbml.api.SBMLDiff;
 import de.unirostock.sems.bives.statsgenerator.algorithm.MeanNumNodesCalculator;
 import de.unirostock.sems.bives.statsgenerator.algorithm.RepositoryProcessor;
-import de.unirostock.sems.bives.statsgenerator.ds.DiffResult;
-import de.unirostock.sems.bives.statsgenerator.ds.ModelVersion;
 import de.unirostock.sems.bives.statsgenerator.io.DiffStatsWriter;
 import de.unirostock.sems.bives.statsgenerator.io.FileStatsWriter;
 
@@ -72,8 +45,6 @@ public class App
 	/** The speed. */
 	public static boolean								speed					= false;
 	
-	private String storageDir;
-	private String workingDir;
 	
 	
 	/**
@@ -111,9 +82,6 @@ public class App
 	 */
 	public App (String storageDir, String workingDir) throws IOException
 	{
-		this.storageDir = storageDir;
-		this.workingDir = workingDir;
-		
 		new File (storageDir + "/stats/").mkdirs ();
 		fsw = new FileStatsWriter (storageDir + "/stats/filestats");
 		fsw.create ();

@@ -57,8 +57,6 @@ public class RepositoryProcessor
 	
 	/** The working dir. */
 	private File						globalWorkingDir;
-	private SBMLValidator		valSBML;
-	private CellMLValidator	valCellMl;
 	/** The fsw. */
 	private FileStatsWriter	fsw;
 	
@@ -91,9 +89,6 @@ public class RepositoryProcessor
 		
 		this.storageDir = storageDir;
 		this.globalWorkingDir = workingDir;
-		
-		this.valCellMl = valCellMl;
-		this.valSBML = valSBML;
 		
 		this.fsw = fsw;
 		this.dsw = dsw;
@@ -423,56 +418,6 @@ public class RepositoryProcessor
 		}
 	}
 	
-	
-	/**
-	 * Process biomodels model.
-	 * 
-	 * @param modelDir
-	 *          the model dir
-	 * @param biomodelsWd
-	 *          the biomodels wd
-	 */
-	/*
-	 * public void processModel (File modelDir, String biomodelsWd)
-	 * {
-	 * File[] versions = modelDir.listFiles ((FileFilter) FileFileFilter.FILE);
-	 * Arrays.sort (versions, NameFileComparator.NAME_COMPARATOR);
-	 * for (int i = 0; i < versions.length; i++)
-	 * {
-	 * // LOGGER.warn (versions[i]);
-	 * // let's skip large files if we need to speed up
-	 * if (speed && versions[i].length () > tooLarge)
-	 * {
-	 * LOGGER.warn ("skipping file ", versions[i], " as it is too large: ",
-	 * versions[i].length ());
-	 * continue;
-	 * }
-	 * System.out.println (modelDir.getName () + " -> " + versions[i]);
-	 * 
-	 * // valSBML = new SBMLValidator ();
-	 * if (!valSBML.validate (versions[i]))
-	 * {
-	 * LOGGER.error ("sbml document is not valid? ", versions[i]);
-	 * continue;
-	 * }
-	 * 
-	 * ModelDocument doc = valSBML.getDocument ();
-	 * Map<String, Integer> docstats = doc.getTreeDocument ().getNodeStats ();
-	 * 
-	 * if (i != 0)
-	 * {
-	 * compare (versions[i - 1], versions[i - 1].getName (), versions[i],
-	 * versions[i].getName (), biomodelsWd, modelDir.getName (), true);
-	 * // doFileStats (versions[i], docstats, modelDir.getName ().startsWith
-	 * // ("BIOM"), versions[i].getName (), versions[i].getName (),
-	 * // modelDir.getName (), false, doc);
-	 * }
-	 * // else
-	 * doFileStats (versions[i], docstats, versions[i].getName (),
-	 * versions[i].getName (), modelDir.getName (), false, doc);
-	 * }
-	 * }
-	 */
 	
 	/**
 	 * Converts a possibly null to an integer. Will return what you provide in
