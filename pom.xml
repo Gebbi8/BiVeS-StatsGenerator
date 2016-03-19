@@ -4,7 +4,7 @@
 
     <groupId>de.unirostock.sems</groupId>
     <artifactId>BiVeS-statsgenerator</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1</version>
     <packaging>jar</packaging>
 
     <name>BiVeS-statsgenerator</name>
@@ -17,18 +17,8 @@
     <dependencies>
         <dependency>
             <groupId>de.unirostock.sems</groupId>
-            <artifactId>BiVeS-CellML</artifactId>
-            <version>1.6.3</version>
-        </dependency>
-        <dependency>
-            <groupId>de.unirostock.sems</groupId>
-            <artifactId>BiVeS-SBML</artifactId>
-            <version>1.7.2</version>
-        </dependency>
-        <dependency>
-            <groupId>de.binfalse</groupId>
-            <artifactId>BFLog</artifactId>
-            <version>1.3.3</version>
+            <artifactId>BiVeS</artifactId>
+            <version>1.9</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

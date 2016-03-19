@@ -4,7 +4,9 @@
 package de.unirostock.sems.bives.statsgenerator.io;
 
 import java.io.IOException;
+import java.util.Date;
 
+import de.unirostock.sems.bives.statsgenerator.App;
 import de.unirostock.sems.bives.statsgenerator.ds.DiffResult;
 
 
@@ -39,8 +41,11 @@ public class DiffStatsWriter
 			+ "bivesinsert\t" + "bivesdelete\t" + "bivesmove\t" + "bivesupdate\t"
 			+ "bivestriggeredinsert\t" + "bivestriggereddelete\t"
 			+ "bivestriggeredmove\t" + "bivestriggeredupdate\t" + "bivesnode\t"
-			+ "bivesattribute\t" + "bivestext\t" + "modeltype\t" + "model\t"
-			+ "version1\t" + "version2");
+			+ "bivesattribute\t" + "bivestext\t"
+			+ "modeltype\t"
+			+ "model\t"
+			//+ "version1date\t" + "version2date\t"
+			+ "version1id\t" + "version2id");
 		writer.newLine ();
 	}
 	
@@ -55,9 +60,13 @@ public class DiffStatsWriter
 	 * @param modifiedVersion the modified version
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public void write (DiffResult dr, String modelType, String modelName, String originalVersion, String modifiedVersion) throws IOException
+	public void write (DiffResult dr, 
+		String modelType,
+		String modelName,
+		//Date originalVersionDate, Date modifiedVersionDate,
+		String originalVersion, String modifiedVersion) throws IOException
 	{
-		writer.append (
+		writer.write (
 
 			(dr.getUnixInserts () + dr.getUnixDeletes ()) + "\t" + 
 			dr.getUnixInserts () + "\t" + 
@@ -83,8 +92,11 @@ public class DiffStatsWriter
 			dr.getXmlTexts () +  "\t" + 
 			"\"" + modelType + "\"\t" +
 			"\"" + modelName + "\"\t" +
+			//"\"" + App.formatter.format (originalVersionDate) + "\"\t" + 
+			//"\"" + App.formatter.format (modifiedVersionDate) + "\"\t" +
 			"\"" + originalVersion + "\"\t" + 
 			"\"" + modifiedVersion + "\"");
+		writer.newLine ();
 	}
 	
 }

@@ -83,7 +83,7 @@ public class Figurizer
 		
 		if (false)
 		{
-			MeanNumNodesCalculatorCellML.run (targetDir.getAbsolutePath () + "/fileStats-cellml", targetDir.getAbsolutePath () + "/fileStats-cellml-per-date");
+			MeanNumNodesCalculator.run (targetDir.getAbsolutePath () + "/fileStats-cellml", targetDir.getAbsolutePath () + "/fileStats-cellml-per-date");
 		}
 		
 
