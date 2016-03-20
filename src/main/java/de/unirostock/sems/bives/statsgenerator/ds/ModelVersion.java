@@ -6,6 +6,7 @@ package de.unirostock.sems.bives.statsgenerator.ds;
 import java.io.File;
 import java.util.Date;
 
+import de.binfalse.bfutils.GeneralTools;
 import de.unirostock.sems.bives.cellml.parser.CellMLDocument;
 import de.unirostock.sems.bives.ds.ModelDocument;
 import de.unirostock.sems.bives.sbml.parser.SBMLDocument;
@@ -152,12 +153,16 @@ public class ModelVersion
 	{
 		if (model.getId ().startsWith ("urn:model:models.cellml.org"))
 		{
-			return App.statsUrl + "resources/index.php?repo=" + model.getId ().substring (10).replaceAll (":", "/").replaceFirst ("!", "&model=") + "&version=" + getVersionId ();
+			String m = model.getId ().substring (10).replaceAll (":", "/");
+			int excl = m.indexOf ("!");
+			String repo = m.substring (0, excl);
+			String model = m.substring (excl);
+			return App.statsUrl + "resources/" + GeneralTools.encodeBase64 (repo.getBytes ()) + "/" + GeneralTools.encodeBase64 (model.getBytes ()) + "/" + GeneralTools.encodeBase64 (getVersionId ().getBytes ());
 		}
 		else if (model.getId ().startsWith ("urn:model:ftp.ebi.ac.uk"))
 		{
 			String n = model.getName ();
-			return App.statsUrl + "resources/index.php?repo=www.ebi.ac.uk/biomodels-main/&model=" + n.substring (0, n.length () - 4) + "&version=" + getVersionId ();
+			return App.statsUrl + "resources/" + GeneralTools.encodeBase64 ("www.ebi.ac.uk/biomodels-main/".getBytes ()) + "/" + GeneralTools.encodeBase64 (n.substring (0, n.length () - 4).getBytes ()) + "/" + GeneralTools.encodeBase64 (getVersionId ().getBytes ());
 		}
 		return "unknown";
 	}

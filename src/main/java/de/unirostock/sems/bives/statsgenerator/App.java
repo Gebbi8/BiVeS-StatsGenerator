@@ -56,6 +56,10 @@ public class App
 	 */
 	public static void main (String[] args) throws IOException
 	{
+		if (args != null)
+			System.exit (0);
+		
+		
 		// to be provided on the command line...
 		String						STORAGE				= "/srv/modelcrawler/storage";
 		String						WORKING				= "/srv/modelcrawler/wd";
