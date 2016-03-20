@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -194,7 +195,7 @@ public class MeanNumNodesCalculator
 			if (line.length != 18)
 			{
 				br.close ();
-				throw new IOException ("don't understand line: " + line);
+				throw new IOException ("don't understand line: " + Arrays.toString (line));
 			}
 
 //#1 nodes
@@ -240,7 +241,7 @@ public class MeanNumNodesCalculator
 		br.close ();
 		
 		BufferedWriter bw = new BufferedWriter (new FileWriter (out));
-		bw.write ("date\ttype\tnFiles\tnodes\tcomponents\tvariables\tunits\trevision\tspecies\treactions\tcompartments\tfunctions\tparameters\trules\tevents" + LOGGER.NEWLINE);
+		bw.write ("date\ttype\tnFiles\tnodes\tcomponents\tvariables\tunits\tspecies\treactions\tcompartments\tfunctions\tparameters\trules\tevents" + LOGGER.NEWLINE);
 		for (String date : dates)
 		{
 			SumLine sbml = new SumLine ();

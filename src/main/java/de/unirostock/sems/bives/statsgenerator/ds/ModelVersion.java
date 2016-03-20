@@ -9,6 +9,7 @@ import java.util.Date;
 import de.unirostock.sems.bives.cellml.parser.CellMLDocument;
 import de.unirostock.sems.bives.ds.ModelDocument;
 import de.unirostock.sems.bives.sbml.parser.SBMLDocument;
+import de.unirostock.sems.bives.statsgenerator.App;
 
 
 
@@ -151,12 +152,12 @@ public class ModelVersion
 	{
 		if (model.getId ().startsWith ("urn:model:models.cellml.org"))
 		{
-			return "http://" + model.getId ().substring (10).replaceAll (":", "/").replaceFirst ("!", "file/" + getVersionId ());
+			return App.statsUrl + "resources/index.php?repo=" + model.getId ().substring (10).replaceAll (":", "/").replaceFirst ("!", "&model=") + "&version=" + getVersionId ();
 		}
 		else if (model.getId ().startsWith ("urn:model:ftp.ebi.ac.uk"))
 		{
 			String n = model.getName ();
-			return "http://www.ebi.ac.uk/biomodels-main/" + n.substring (0, n.length () - 4);
+			return App.statsUrl + "resources/index.php?repo=www.ebi.ac.uk/biomodels-main/&model=" + n.substring (0, n.length () - 4) + "&version=" + getVersionId ();
 		}
 		return "unknown";
 	}

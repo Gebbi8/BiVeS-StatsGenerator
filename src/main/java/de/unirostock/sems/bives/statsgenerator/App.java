@@ -15,7 +15,6 @@ import de.unirostock.sems.bives.statsgenerator.io.FileStatsWriter;
 
 
 
-// TODO: Auto-generated Javadoc
 /**
  * Hello world!.
  */
@@ -25,7 +24,6 @@ public class App
 	/** The Constant formatter. */
 	public final static SimpleDateFormat	formatter			= new SimpleDateFormat (
 																												"yyyy-MM-dd");
-	
 	
 	/** The fsw. */
 	private FileStatsWriter								fsw;
@@ -44,6 +42,9 @@ public class App
 	
 	/** The speed. */
 	public static boolean								speed					= false;
+	
+	/** The url to the stats website. */
+	public static String statsUrl = "https://stats.sems.uni-rostock.de/";
 	
 	
 	
@@ -112,6 +113,8 @@ public class App
 		long firstStop = System.currentTimeMillis ();
 		new RepositoryProcessor (new File (cellmlSource), new File (cellmlWorking), valSBML, valCellMl, fsw, dsw).process ();
 		long secondStop = System.currentTimeMillis ();
+		fsw.close ();
+		dsw.close ();
 
 		
 		// post-processing
@@ -141,7 +144,5 @@ public class App
 		hours   = (int) ((time / (1000*60*60)) % 24);
 		System.out.println ("everything took: " + time + "ms => " + hours + "h " + minutes + "m " + seconds + "s");
 		
-		fsw.close ();
-		dsw.close ();
 	}
 }

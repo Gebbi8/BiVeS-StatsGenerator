@@ -43,7 +43,6 @@ import de.unirostock.sems.bives.statsgenerator.io.FileStatsWriter;
 
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class BiomodelsProcessor.
  * 
