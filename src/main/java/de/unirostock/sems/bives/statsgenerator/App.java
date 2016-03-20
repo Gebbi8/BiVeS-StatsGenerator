@@ -44,7 +44,7 @@ public class App
 	public static boolean								speed					= false;
 	
 	/** The url to the stats website. */
-	public static String statsUrl = "https://stats.sems.uni-rostock.de/";
+	public static String statsUrl = "http://most.sems.uni-rostock.de/";
 	
 	
 	
