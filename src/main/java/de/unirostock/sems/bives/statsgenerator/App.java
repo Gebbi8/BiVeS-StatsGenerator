@@ -3,8 +3,13 @@ package de.unirostock.sems.bives.statsgenerator;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
 
 import de.binfalse.bflog.LOGGER;
+import de.unirostock.sems.ModelCrawler.CrawlerAPI;
+import de.unirostock.sems.ModelCrawler.databases.Interface.Change;
+import de.unirostock.sems.ModelCrawler.databases.Interface.ChangeSet;
 import de.unirostock.sems.bives.cellml.algorithm.CellMLValidator;
 import de.unirostock.sems.bives.sbml.algorithm.SBMLValidator;
 import de.unirostock.sems.bives.statsgenerator.algorithm.MeanNumNodesCalculator;
@@ -46,7 +51,7 @@ public class App
 	/** The url to the stats website. */
 	public static String statsUrl = "http://most.sems.uni-rostock.de/";
 	
-	
+	private String date;
 	
 	/**
 	 * The main method.
@@ -56,13 +61,13 @@ public class App
 	 */
 	public static void main (String[] args) throws IOException
 	{
-		if (args != null)
-			System.exit (0);
+		/*if (args != null)
+			System.exit (0);*/
 		
 		
 		// to be provided on the command line...
-		String						STORAGE				= "/srv/modelcrawler/storage";
-		String						WORKING				= "/srv/modelcrawler/wd";
+		String						STORAGE				= "/srv/modelcrawler2/storage";
+		String						WORKING				= "/srv/modelcrawler2/working";
 		speed = false;
 	
 		new File (WORKING).mkdirs ();
@@ -87,10 +92,11 @@ public class App
 	 */
 	public App (String storageDir, String workingDir) throws IOException
 	{
+		date = new SimpleDateFormat ("yyyy-MM-dd_HH-mm-ss").format(new Date ());
 		new File (storageDir + "/stats/").mkdirs ();
-		fsw = new FileStatsWriter (storageDir + "/stats/filestats");
+		fsw = new FileStatsWriter (storageDir + "/stats/filestats-" + date);
 		fsw.create ();
-		dsw = new DiffStatsWriter (storageDir + "/stats/diffstats");
+		dsw = new DiffStatsWriter (storageDir + "/stats/diffstats-" + date);
 		dsw.create ();
 	}
 	
@@ -103,6 +109,9 @@ public class App
 	 */
 	public void goForIt (String storageDir, String workingDir) throws IOException
 	{
+		String [] crawlerArgs = new String [] {"-c", getClass().getClassLoader().getResource("modelcrawler.conf").getFile(), "--no-morre"};
+		new CrawlerAPI(crawlerArgs);
+		
 		fsw.writeHeader ();
 		dsw.writeHeader ();
 		
