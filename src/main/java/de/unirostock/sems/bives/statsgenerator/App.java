@@ -72,8 +72,7 @@ public class App
 	 *
 	 * @param args the arguments
 	 * @throws IOException Signals that an I/O exception has occurred.
-	 * @throws ParseException 
-	 * @throws org.apache.commons.cli.ParseException 
+	 * @throws ParseException signals problems with parsing the modelcrawlser's config
 	 */
 	public static void main (String[] args) throws IOException, ParseException
 	{		
@@ -155,7 +154,7 @@ public class App
 	 * @param storageDir the storage dir
 	 * @param workingDir the working dir
 	 * @throws IOException Signals that an I/O exception has occurred.
-	 * @throws ParseException 
+	 * @throws ParseException signals problems with parsing the modelcrawlser's config
 	 */
 	@SuppressWarnings("unchecked")
 	public void goForIt (String storageDir, String workingDir) throws IOException, ParseException
