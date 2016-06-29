@@ -3,6 +3,7 @@ package de.unirostock.sems.bives.statsgenerator;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
@@ -159,7 +160,7 @@ public class App
 	@SuppressWarnings("unchecked")
 	public void goForIt (String storageDir, String workingDir) throws IOException, ParseException
 	{
-		JSONObject json = (JSONObject) new JSONParser().parse(new FileReader (getClass().getClassLoader().getResource("modelcrawler.template").getFile()));
+		JSONObject json = (JSONObject) new JSONParser().parse(new InputStreamReader (getClass().getClassLoader().getResourceAsStream("modelcrawler.template")));
 		json.put("workingDir", workingDir);
 		((JSONObject) json.get("storage")).put("baseDir", storageDir);
 		File tmp = File.createTempFile("stats-generator-", ".bives");
