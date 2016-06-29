@@ -5,9 +5,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Map;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -66,21 +72,55 @@ public class App
 	 * @param args the arguments
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws ParseException 
+	 * @throws org.apache.commons.cli.ParseException 
 	 */
 	public static void main (String[] args) throws IOException, ParseException
-	{
-		/*if (args != null)
-			System.exit (0);*/
-		
-		
+	{		
 		// to be provided on the command line...
 		String						STORAGE				= "/srv/modelcrawler/storage";
 		String						WORKING				= "/srv/modelcrawler/working";
 		speed = false;
+		
+		Options options = new Options();
+		options.addOption("f", "fast", false, "be quick and neglect files bigger than 10M");
+		options.addOption("s", "storage", true, "set the storage location, defaults to " + STORAGE);
+		options.addOption("w", "working", true, "set the working directory, defaults to " + WORKING);
+		options.addOption("h", "help", false, "print this help message");
+
+		try
+		{
+			CommandLine line = new DefaultParser ().parse (options, args);
+			if (line.hasOption ("f"))
+				speed = true;
+			if (line.hasOption ("s"))
+				STORAGE = line.getOptionValue("s");
+			if (line.hasOption ("w"))
+				WORKING = line.getOptionValue("w");
+			if (line.hasOption ("h"))
+				throw new org.apache.commons.cli.ParseException ("you need help");
+		}
+		catch (org.apache.commons.cli.ParseException exp)
+		{
+		    System.out.println ("Unexpected exception: " + exp.getMessage ());
+		    HelpFormatter formatter = new HelpFormatter ();
+			formatter.setOptionComparator (new Comparator<Option> ()
+			{
+				
+				private static final String	OPTS_ORDER	= "hcrio";
+				
+				
+				public int compare (Option o1, Option o2)
+				{
+					return OPTS_ORDER.indexOf (o1.getLongOpt ())
+						- OPTS_ORDER.indexOf (o2.getLongOpt ());
+				}
+			});
+			formatter.printHelp ("java -jar statsgenerator.jar", options, true);
+			return;
+		}
 	
 		new File (WORKING).mkdirs ();
 		
-		speed = true;
 		LOGGER.setMinLevel (LOGGER.WARN);
 		LOGGER.setLogFile (new File (WORKING + "/bflog-differ"));
 		LOGGER.setLogStackTrace (true);
