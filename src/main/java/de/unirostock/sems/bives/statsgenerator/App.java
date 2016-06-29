@@ -78,8 +78,8 @@ public class App
 	public static void main (String[] args) throws IOException, ParseException
 	{		
 		// to be provided on the command line...
-		String						STORAGE				= "/srv/modelcrawler/storage";
-		String						WORKING				= "/srv/modelcrawler/working";
+		String						STORAGE				= "/srv/modelstats/storage";
+		String						WORKING				= "/srv/modelstats/working";
 		speed = false;
 		
 		Options options = new Options();
