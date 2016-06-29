@@ -156,7 +156,7 @@ public class ModelVersion
 			String m = model.getId ().substring (10).replaceAll (":", "/");
 			int excl = m.indexOf ("!");
 			String repo = m.substring (0, excl);
-			String model = m.substring (excl);
+			String model = m.substring (excl + 1);
 			return App.statsUrl + "resources/" + GeneralTools.encodeBase64 (repo.getBytes ()) + "/" + GeneralTools.encodeBase64 (model.getBytes ()) + "/" + GeneralTools.encodeBase64 (getVersionId ().getBytes ());
 		}
 		else if (model.getId ().startsWith ("urn:model:ftp.ebi.ac.uk"))

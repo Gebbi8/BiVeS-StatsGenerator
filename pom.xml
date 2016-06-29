@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.unirostock.sems</groupId>
     <artifactId>BiVeS-statsgenerator</artifactId>
-    <version>0.1</version>
+    <version>0.1.1</version>
     <packaging>jar</packaging>
 
     <name>BiVeS-statsgenerator</name>
@@ -35,6 +34,11 @@
             <groupId>de.binfalse</groupId>
             <artifactId>BFUtils</artifactId>
             <version>0.4.1</version>
+        </dependency>
+        <dependency>
+        	<groupId>de.unirostock.sems</groupId>
+        	<artifactId>ModelCrawler</artifactId>
+        	<version>0.1.1</version>
         </dependency>
     </dependencies>
 </project>
