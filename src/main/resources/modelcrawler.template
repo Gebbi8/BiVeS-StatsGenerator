@@ -1,5 +1,5 @@
 {
-  "workingDir" : "/srv/modelcrawler2/working",
+  "workingDir" : "/srv/modelcrawler/working",
   "encoding" : "UTF-8",
   "pathSeparator" : "/", 
   "extensionBlacklist" : [ "png", "bmp", "jpg", "jpeg", "html", "xhtml", "svg", "pdf", "json", "pl", "rdf", "rar", "msh", "zip", "htm" ],
@@ -24,6 +24,6 @@
   "storage" : {
     "type" : "file",
     "httpAccessPath" : "http://localhost/models/",
-    "baseDir" : "/srv/modelcrawler2/storage"
+    "baseDir" : "/srv/modelcrawler/storage"
   }
 }

@@ -1,12 +1,19 @@
 package de.unirostock.sems.bives.statsgenerator;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import de.binfalse.bflog.LOGGER;
+import de.binfalse.bfutils.GeneralTools;
 import de.unirostock.sems.ModelCrawler.CrawlerAPI;
 import de.unirostock.sems.ModelCrawler.databases.Interface.Change;
 import de.unirostock.sems.ModelCrawler.databases.Interface.ChangeSet;
@@ -58,16 +65,17 @@ public class App
 	 *
 	 * @param args the arguments
 	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws ParseException 
 	 */
-	public static void main (String[] args) throws IOException
+	public static void main (String[] args) throws IOException, ParseException
 	{
 		/*if (args != null)
 			System.exit (0);*/
 		
 		
 		// to be provided on the command line...
-		String						STORAGE				= "/srv/modelcrawler2/storage";
-		String						WORKING				= "/srv/modelcrawler2/working";
+		String						STORAGE				= "/srv/modelcrawler/storage";
+		String						WORKING				= "/srv/modelcrawler/working";
 		speed = false;
 	
 		new File (WORKING).mkdirs ();
@@ -106,10 +114,19 @@ public class App
 	 * @param storageDir the storage dir
 	 * @param workingDir the working dir
 	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws ParseException 
 	 */
-	public void goForIt (String storageDir, String workingDir) throws IOException
+	@SuppressWarnings("unchecked")
+	public void goForIt (String storageDir, String workingDir) throws IOException, ParseException
 	{
-		String [] crawlerArgs = new String [] {"-c", getClass().getClassLoader().getResource("modelcrawler.conf").getFile(), "--no-morre"};
+		JSONObject json = (JSONObject) new JSONParser().parse(new FileReader (getClass().getClassLoader().getResource("modelcrawler.template").getFile()));
+		json.put("workingDir", workingDir);
+		((JSONObject) json.get("storage")).put("baseDir", storageDir);
+		File tmp = File.createTempFile("stats-generator-", ".bives");
+		tmp.deleteOnExit();
+		GeneralTools.stringToFile(json.toJSONString(), tmp);
+		
+		String [] crawlerArgs = new String [] {"-c", tmp.getAbsolutePath(), "--no-morre"};
 		new CrawlerAPI(crawlerArgs);
 		
 		fsw.writeHeader ();
