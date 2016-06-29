@@ -3,7 +3,7 @@
 
     <groupId>de.unirostock.sems</groupId>
     <artifactId>BiVeS-statsgenerator</artifactId>
-    <version>0.3.3</version>
+    <version>0.3.4</version>
     <packaging>jar</packaging>
 
     <name>BiVeS-statsgenerator</name>
@@ -149,7 +149,7 @@
 						<version>1.6</version>
 						<executions>
 						  <execution>
-						      <phase>package</phase>
+						      <phase>deploy</phase>
 						      <configuration>
 						          <target>
 						              <exec executable="docker">
