@@ -1,4 +1,3 @@
-
 # /!\Change location of repo-evolution (careful: without revision column)
 files=read.table ("./data/repo-evolution", header=T)
 files[,1] = as.Date(files[,1], "%Y-%m-%d")
@@ -20,31 +19,34 @@ nb_nodes_cell <- replace(nb_nodes_cell, is.na(nb_nodes_cell), 0)
 dates = unique(Biomodels[,1])
 dates = dates[-16]
 
+dates <- c(dates[seq(1, length(dates), 3)], dates[30])
 
 #Plot:
-pdf ("./data/graphs/nbModels&avgNodes.pdf", width=9, height=7)
-
-par(mar=c(5, 4, 4, 6) + 0.1)
+pdf ("./data/graphs/nbModels_avgNodes.pdf", width=9, height=3.5)
+par(mfrow=c(1,2))
 
 # Plot the trend in the number of models in Biomodels and Physiome Model repositories over the time:
-plot(Biomodels[,1], nb_models_bio,  cex=2, axes=FALSE, type = "l",ylab="Number of models", col='blue', xlab="", lwd=4)
+plot(nb_models_bio ~ Biomodels[,1],  cex=2, axes=FALSE, type = "l",ylab="#models", col='blue', xlab="", lwd=3)
+
+mtext("Time", side=1, line=4)
 axis(1, at=dates,format(dates, "%b %y"),las=2,cex.axis=.9)
-axis(2, ylim=c(0,1),col="black",las=1) 
-lines(CellMl[,1],nb_models_cell, type = "l", col='red', lwd=4, pch=5)
+axis(2, ylim=c(0,max(nb_models_bio, nb_models_cell)),col="black",las=1) 
+lines(CellMl[,1],nb_models_cell, type = "l", col='red', lwd=3, pch=5)
+
 
 # Plot the mean number of nodes in the Biomodels and Physiome Model repositories models over time
 par(new=TRUE)
-plot(Biomodels[,1], nb_nodes_biom,ylab="", xlab="", axes=FALSE,type='l', col = 'blue', ylim=c(0,max(nb_nodes_cell, nb_nodes_biom)), lty=3, lwd=2)
+par(mfrow=c(1,2))
+plot(nb_nodes_biom ~ Biomodels[,1] ,ylab="", xlab="", axes=FALSE,type='l', col = 'blue', ylim=c(0,max(nb_nodes_cell, nb_nodes_biom)), lwd=3)
 mtext("Time", side=1, line=4)
-axis(4, ylim=c(0,1),col="black",las=1) 
-mtext("Average number of nodes per model",side=4,line=4) 
-lines(CellMl[,1], nb_nodes_cell, type='l', col='red',  lty=3, lwd=2)
+axis(1, at=dates,format(dates, "%b %y"),las=2,cex.axis=.9)
+axis(2, ylim=c(0,max(nb_nodes_biom, nb_nodes_cell)),col="black",las=1) 
+mtext("Avg #nodes per model",side=2,line=4) 
+lines(CellMl[,1], nb_nodes_cell, type='l', col='red', lwd=3)
+mtext( "Evolution of models in the Biomodels and Physiome Model Repositories over time", side=3, line=-2, outer = TRUE)
+#legend("topleft", col = , lty=c(1,1), )
 
-
-legend("topleft", col = c(4,2,4,2), lty=c(1,1,3,3),
-       legend = c("number of models in BioModels", "number of models in Physiome", "avg number of nodes in BioModels", "avg number of nodes in Physiome"))
-title(main = "Evolution of models in the Biomodels and Physiome Model Repositories over time")
-
-
+legend(x = "top",inset = 0, legend = c("BioModels", "Physiome"), col=c(4,2), lwd=4, cex=0.7)
 dev.off()
+
 
