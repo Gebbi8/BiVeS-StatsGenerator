@@ -1,11 +1,10 @@
 library("fields")
 
-files=read.table ("DIFFSFILE", header=T)
-# files[,12] -> files[,18]
-# files[,13] -> files[,19]
-# files[,14] -> files[,17]
+files=read.table ("./data/diffstats", header=T)
 files[,18] = as.Date(files[,18], "%Y-%m-%d")
 files[,19] = as.Date(files[,19], "%Y-%m-%d")
+files = files[grep("^/BIO", files[,17]),] # get curated models from Biomodels
+files=files[complete.cases(files[,18]),] # remove lines with missing values
 
 dates=sort(unique(c(files[,18], files[,19])))
 models=sort(unique(files[,17]))
@@ -22,11 +21,8 @@ print (paste ("num relevant diffs bives:",length(files[files[,4]>0,1]) ))
 print (paste ("mean num ops unix:", mean (files[files[,4]>0,1])))
 print (paste ("mean num ops bives:", mean (files[files[,4]>0,4])))
 
-
+# Matrix of unique models (row) and the different Biomodels release dates (column)
 m=matrix(0, nrow=length(models), ncol=length(dates))
-#rownames(m)=models
-#colnames(m)=dates
-
 dimnames(m) = list(models, dates)
 
 #1 (unixDelete + unixInsert) + "\t"
@@ -49,27 +45,42 @@ dimnames(m) = list(models, dates)
 #8 + aV + "\t"
 #9 + bV);
 
-sapply (models,
-	function (model)
-	{
-		sapply (1:length(dates),
-			function (datenum)
-			{
-# 				print (paste (model, datenum))
-				if (sum(files[,19]==dates[datenum]&files[,17]==model) > 0)
-					m[model,datenum]<<-files[files[,19]==dates[datenum]&files[,17]==model,4]
-			}
-		)
-	}
-)
 
-pdf ("MATRIXFILE.pdf", width=9, height=7)
+# sapply (models,
+# 	function (model)
+# 	{
+# 		sapply (1:length(dates),
+# 			function (datenum)
+# 			{
+#  			#	print (paste (model, datenum))
+# 				if (sum(files[,19]==dates[datenum]&files[,17]==model) > 0){
+# 				  print (paste (model, datenum))
+# 					m[model,datenum]<<-files[files[,19]==dates[datenum]&files[,17]==model,4]
+# 		  	}
+# 			}
+# 		)
+# 	}
+# )
+
+
+# Matrix m to get the BIVES number of changes for a model that occured at a certain date (between two versions)
+for(model in models){
+  for(datenum in 1:length(dates)){
+    if(sum(files[,19]==dates[datenum]&files[,17]==model) > 0){
+      print(files[,19]==dates[datenum] && files[,17] == model)
+      m[model,datenum] = files[files[,19]==dates[datenum]&files[,17]==model,4]
+    }
+  }
+}
+
+#plots
+pdf ("./data/graphs/Biomodels/MATRIXFILE.pdf", width=9, height=7)
 image(m)
 dev.off()
 
 m2=log(m)
 m2[is.infinite(m2)]=0
-pdf ("MATRIXFILE-log.pdf", width=9, height=6)
+pdf ("./data/graphs/Biomodels/MATRIXFILE-log.pdf", width=9, height=6)
 
 oldpar=par(mar=c(8,4,0.2,5.2)+.1,mfrow=c(1,1))
 image(m2, xaxt = "n", yaxt = "n", xlab="",col=colorRampPalette(c("#ffffff", "#0040ff"))( 12 ))#,legend.only = T)
