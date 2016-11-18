@@ -67,11 +67,15 @@ dimnames(m) = list(models, dates)
 for(model in models){
   for(datenum in 1:length(dates)){
     if(sum(files[,19]==dates[datenum]&files[,17]==model) > 0){
-      print(files[,19]==dates[datenum] && files[,17] == model)
+#       print(files[,19]==dates[datenum] && files[,17] == model)
       m[model,datenum] = files[files[,19]==dates[datenum]&files[,17]==model,4]
     }
   }
 }
+
+
+dir.create("./data/graphs/Biomodels/", showWarnings=F, recursive=T)
+
 
 #plots
 pdf ("./data/graphs/Biomodels/MATRIXFILE.pdf", width=9, height=7)
@@ -85,7 +89,7 @@ pdf ("./data/graphs/Biomodels/MATRIXFILE-log.pdf", width=9, height=6)
 oldpar=par(mar=c(8,4,0.2,5.2)+.1,mfrow=c(1,1))
 image(m2, xaxt = "n", yaxt = "n", xlab="",col=colorRampPalette(c("#ffffff", "#0040ff"))( 12 ))#,legend.only = T)
 # modelTiks=models[seq(1, length(models), 20)]
-modelTiks=sapply(models[seq(1, length(models), 20)], substr, 0, 15)
+modelTiks=sapply(models[seq(1, length(models), 20)], substr, 2, 16)
 axis(1, at=(0:(length(modelTiks)-1))/(length(modelTiks)-1),labels=modelTiks,las=2,cex.axis=.9)
 axis(2, at=(0:(length(dates)-1))/(length(dates)-1),labels=format(dates, "%b %y"),las=2,cex.axis=.9)
 
