@@ -1,4 +1,4 @@
-files=read.table ("FILESTATS", header=T)
+files=read.table ("./data/filestats", header=T)
 files[,14] = as.Date(files[,14], "%Y-%m-%d")
 
 #1 nodes
@@ -23,7 +23,7 @@ print (paste ("num versions:", length(files[,15])))
 
 dates=sort(unique(files[,14]))
 
-pdf ("OUTPUT.pdf", width=9, height=7)
+pdf ("./data/graphs/Biomodels/OUTPUT.pdf", width=9, height=7)
 
 oldpar=par(mar=c(5,4,0.2,4)+.1,mfrow=c(1,1))
 
@@ -59,11 +59,11 @@ body(legend2)[[49]] <- quote(
 	invisible(list(rect = list(w = w, h = h, left = left, top = top),
 								 text = list(x = xt, y = yt), points = list(x = x1, y = y1)))
 )
-myLegend <- legend2("topleft",lty=1,  pt.bg = 'white',  pt.cex = 2, pt.lwd = 0, cex = 1, pch = 1, #pch = c(1,3,5,2,6,8), 
+myLegend <- legend2("topleft",lty=1,  bg = "white",  cex = 2, pt.lwd = 0, pch = 1, #pch = c(1,3,5,2,6,8), 
 			 col = c(4,2,3,5,6,8), 
 			 legend = c("avg number of nodes per model", "number of models per release", "avg number of species per model", "avg number of reactions per model", "avg number of parameters per model", "avg number of rules per model"))
 
-points(myLegend$points$x, myLegend$points$y, pch = 21, col = "white", bg="white", pt.bg = 'white', cex = 2)
+points(myLegend$points$x, myLegend$points$y, pch = 21, col = "white", bg="white", cex = 2)
 
 points(myLegend$points$x, myLegend$points$y, pch = c(1,3,5,2,6,8), col = c(4,2,3,5,6,8), cex = .5)
 
@@ -79,7 +79,7 @@ dev.off()
 
 
 
-pdf ("OUTPUT-nversions.pdf",width=20,height=5)
+pdf ("./data/graphs/Biomodels/OUTPUT-nversions.pdf",width=20,height=5)
 plot(table(files[,16]))
 dev.off()
 

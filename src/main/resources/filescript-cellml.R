@@ -1,6 +1,8 @@
-files=read.table ("FILESTATS", header=T)
+files=read.table ("./data/filestats", header=T)
 files[,14] = as.Date(files[,14], "%Y-%m-%d")
 
+files=files[files[,13]=="CellML",]
+files=files[complete.cases(files[,18]),]
 #1 nodes
 #2 species
 #3 reactions
@@ -65,12 +67,11 @@ numModels=sapply(dates,function (date)
 # 	mean(all[all>0])
 # })
 
-hack=read.table ("CELLMLPERDATE")
+hack=read.table("CELLMLPERDATE")
 hack[,1] = as.Date(hack[,1], "%Y-%m-%d")
 
 
-
-pdf ("OUTPUT.pdf", width=9, height=6)
+pdf ("./data/graphs/CellML/OUTPUT.pdf", width=9, height=6)
 
 oldpar=par(mar=c(2,2,0.2,0)+.1,mfrow=c(1,1))
 plot(dates, numModels, type="l",col="#0040ff",lwd=2,xlab="",ylab="",ylim=c(0,300+max(numModels,hack[,2]/hack[,3])))
@@ -96,7 +97,7 @@ dev.off()
 # hack[,1] = as.Date(hack[,1], "%Y-%m-%d")
 
 
-pdf ("OUTPUT-talk1.pdf", width=9, height=6)
+pdf ("./data/graphs/CellML/OUTPUT-talk1.pdf", width=9, height=6)
 
 oldpar=par(mar=c(2,2,0.2,0)+.1,mfrow=c(1,1))
 plot(dates, numModels, type="l",col="#0040ff",lwd=2,xlab="",ylab="")
@@ -111,7 +112,7 @@ dev.off()
 
 
 
-pdf ("OUTPUT-talk2.pdf", width=9, height=6)
+pdf ("./data/graphs/CellML/OUTPUT-talk2.pdf", width=9, height=6)
 
 oldpar=par(mar=c(2,2,0.2,0)+.1,mfrow=c(1,1))
 plot(dates, numModels, type="l",col="#0040ff",lwd=2,xlab="",ylab="")
@@ -124,7 +125,7 @@ dev.off()
 
 
 
-pdf ("OUTPUT-entities.pdf", width=9, height=6)
+pdf ("./data/graphs/CellML/OUTPUT-entities.pdf", width=9, height=6)
 # 
 oldpar=par(mar=c(2,4,0.2,4)+.1,mfrow=c(1,1))
 # numUnits

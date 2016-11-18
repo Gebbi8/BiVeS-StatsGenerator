@@ -1,5 +1,5 @@
 
-diffstats=read.table("DIFFSTATSFILE", header=T)
+diffstats=read.table("./data/diffstats", header=T)
 
 
 
@@ -220,14 +220,14 @@ dev.off()
 }
 
 
-processDiffs(diffstats, "all", "DIFFRESULTSDIR/")
+processDiffs(diffstats, "all", "./data/graphs/diffs/")
 
-processDiffs(biomodels_curated, "biomodels_curated", "DIFFRESULTSDIR/")
-processDiffs(biomodels_noncurated, "biomodels_noncurated", "DIFFRESULTSDIR/")
-processDiffs(biomodels_all, "biomodels_all", "DIFFRESULTSDIR/")
+processDiffs(biomodels_curated, "biomodels_curated", "./data/graphs/diffs/")
+processDiffs(biomodels_noncurated, "biomodels_noncurated", "./data/graphs/diffs/")
+processDiffs(biomodels_all, "biomodels_all", "./data/graphs/diffs/")
 
 
-processDiffs(cellml, "cellml", "DIFFRESULTSDIR/")
+processDiffs(cellml, "cellml", "./data/graphs/diffs/")
 
 
 
