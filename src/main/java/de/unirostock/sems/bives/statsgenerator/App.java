@@ -186,9 +186,8 @@ public class App
 		fsw.close ();
 		dsw.close ();
 
-		
 		// post-processing
-		MeanNumNodesCalculator.run (storageDir + "/stats/filestats", storageDir + "/stats/repo-evolution");
+		MeanNumNodesCalculator.run (storageDir + "/stats/filestats-" + date, storageDir + "/stats/repo-evolution-" + date);
 		
 		
 		System.out.println ("done doing statistics");
