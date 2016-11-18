@@ -1,9 +1,9 @@
-files=read.table ("zzzzFullStatsFiles")
+files=read.table ("./data/filestats")
 files[,6] = as.Date(files[,6], "%Y-%m-%d")
 
 dates=sort(unique(files[,6]))
 
-pdf ("filestats.pdf", width=9, height=7)
+pdf ("./data/graphs/filestats.pdf", width=9, height=7)
 oldpar=par(mar=c(5,4,0.2,4)+.1,mfrow=c(1,1))
 
 meanNodes=sapply(dates, function (d) { mean (files[files[,6]==d,1])})
