@@ -250,6 +250,7 @@ public class RepositoryProcessor
 			+ originalVersion.getVersionId () + "__"
 			+ modifiedVersion.getVersionId ();
 		
+		LOGGER.debug ("  --> unix:");
 		// compare using unix diff
 		try
 		{
@@ -265,9 +266,9 @@ public class RepositoryProcessor
 			String line;
 			while ( (line = br.readLine ()) != null)
 			{
-				if (line.startsWith ("<"))
+				if (line.startsWith ("<") || line.startsWith ("-"))
 					dr.incrementUnixDeletes ();
-				else if (line.startsWith (">"))
+				else if (line.startsWith (">") || line.startsWith ("+"))
 					dr.incrementUnixInserts ();
 				bw.write (line);
 				bw.newLine ();
@@ -281,11 +282,13 @@ public class RepositoryProcessor
 				" and ", modifiedVersion);
 			return false;
 		}
+		LOGGER.debug  ("  -->     " + (dr.getUnixDeletes () + dr.getUnixInserts ()));
 		
 		// do not include equal files
 		if (dr.getUnixDeletes () + dr.getUnixInserts () == 0)
 			return false;
-		
+
+		LOGGER.debug  ("  --> bives:");
 		// compare using bives
 		try
 		{
@@ -324,7 +327,8 @@ public class RepositoryProcessor
 			dr.setXmlAttributes (patch.getNumAttributeChanges ());
 			dr.setXmlTexts (patch.getNumTextChanges ());
 			
-			LOGGER.warn (dr);
+//			LOGGER.warn (dr);
+			LOGGER.debug  ("  -->     " + (patch.getNumInserts ()+patch.getNumDeletes ()+patch.getNumMoves ()+patch.getNumUpdates ()));
 		}
 		catch (Exception e)
 		{
