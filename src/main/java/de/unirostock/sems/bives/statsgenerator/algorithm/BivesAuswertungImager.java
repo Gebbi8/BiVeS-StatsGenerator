@@ -194,7 +194,6 @@ public class BivesAuswertungImager
 	/**
 	 * Creates the image bives horizontally.
 	 *
-	 * @param findNovak the find novak
 	 * @param in the in
 	 * @param out the out
 	 * @param scale the scale

@@ -123,6 +123,7 @@ public class App
 		
 		LOGGER.setMinLevel (LOGGER.WARN);
 		LOGGER.setLogFile (new File (WORKING + "/bflog-differ"));
+		LOGGER.setLogToFile (true);
 		LOGGER.setLogStackTrace (true);
 		
 		App app = new App (STORAGE, WORKING);
