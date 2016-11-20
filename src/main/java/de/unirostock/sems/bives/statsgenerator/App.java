@@ -1,13 +1,16 @@
 package de.unirostock.sems.bives.statsgenerator;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.cli.CommandLine;
@@ -28,6 +31,7 @@ import de.unirostock.sems.bives.cellml.algorithm.CellMLValidator;
 import de.unirostock.sems.bives.sbml.algorithm.SBMLValidator;
 import de.unirostock.sems.bives.statsgenerator.algorithm.MeanNumNodesCalculator;
 import de.unirostock.sems.bives.statsgenerator.algorithm.RepositoryProcessor;
+import de.unirostock.sems.bives.statsgenerator.ds.ComodiTermCounter;
 import de.unirostock.sems.bives.statsgenerator.io.DiffStatsWriter;
 import de.unirostock.sems.bives.statsgenerator.io.FileStatsWriter;
 
@@ -64,6 +68,8 @@ public class App
 	
 	/** The url to the stats website. */
 	public static String statsUrl = "http://most.sems.uni-rostock.de/";
+	
+	private Map<String, ComodiTermCounter> comodiTerms;
 	
 	private String date;
 	
@@ -147,6 +153,8 @@ public class App
 		fsw.create ();
 		dsw = new DiffStatsWriter (storageDir + "/stats/diffstats-" + date);
 		dsw.create ();
+		
+		comodiTerms = new HashMap<String, ComodiTermCounter> ();
 	}
 	
 	/**
@@ -180,9 +188,9 @@ public class App
 		
 		// doing stats
 		long startMillis = System.currentTimeMillis ();
-		new RepositoryProcessor (new File (biomodelsSource), new File (biomodelsWorking), valSBML, valCellMl, fsw, dsw).process ();
+		new RepositoryProcessor (new File (biomodelsSource), new File (biomodelsWorking), valSBML, valCellMl, fsw, dsw, comodiTerms).process ();
 		long firstStop = System.currentTimeMillis ();
-		new RepositoryProcessor (new File (cellmlSource), new File (cellmlWorking), valSBML, valCellMl, fsw, dsw).process ();
+		new RepositoryProcessor (new File (cellmlSource), new File (cellmlWorking), valSBML, valCellMl, fsw, dsw, comodiTerms).process ();
 		long secondStop = System.currentTimeMillis ();
 		fsw.close ();
 		dsw.close ();
@@ -190,6 +198,15 @@ public class App
 		// post-processing
 		MeanNumNodesCalculator.run (storageDir + "/stats/filestats-" + date, storageDir + "/stats/repo-evolution-" + date);
 		
+		// dump comodi terms
+		BufferedWriter bw = new BufferedWriter (new FileWriter (storageDir + "/stats/comodi-terms-" + date));
+		for (String term: comodiTerms.keySet ())
+		{
+			ComodiTermCounter ctc = comodiTerms.get (term);
+			bw.write (ctc.term + "\t" + (ctc.nSBML + ctc.nCellMl) + "\t" + ctc.nSBML + "\t" + ctc.nCellMl);
+			bw.newLine ();
+		}
+		bw.close ();
 		
 		System.out.println ("done doing statistics");
 		System.out.println ("startMillis " + startMillis);

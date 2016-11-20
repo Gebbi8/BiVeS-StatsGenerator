@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.jena.rdf.model.Statement;
 import org.jdom2.Element;
 import org.json.simple.parser.ParseException;
 
@@ -34,12 +35,14 @@ import de.unirostock.sems.bives.ds.Patch;
 import de.unirostock.sems.bives.sbml.algorithm.SBMLValidator;
 import de.unirostock.sems.bives.sbml.api.SBMLDiff;
 import de.unirostock.sems.bives.sbml.parser.SBMLDocument;
+import de.unirostock.sems.bives.statsgenerator.ds.ComodiTermCounter;
 import de.unirostock.sems.bives.statsgenerator.ds.DiffResult;
 import de.unirostock.sems.bives.statsgenerator.ds.InfoJs;
 import de.unirostock.sems.bives.statsgenerator.ds.Model;
 import de.unirostock.sems.bives.statsgenerator.ds.ModelVersion;
 import de.unirostock.sems.bives.statsgenerator.io.DiffStatsWriter;
 import de.unirostock.sems.bives.statsgenerator.io.FileStatsWriter;
+import de.unirostock.sems.comodi.Change;
 
 
 
@@ -64,25 +67,22 @@ public class RepositoryProcessor
 	private InfoJs info;
 	private List<Date> modelVersions;
 	
+	private Map<String, ComodiTermCounter> comodiTerms;
+	
 	/**
 	 * Instantiates a new biomodels processor.
-	 * 
-	 * @param storageDir
-	 *          the storage dir
-	 * @param workingDir
-	 *          the working dir
-	 * @param valSBML
-	 *          the val sbml
-	 * @param valCellMl
-	 *          the val cell ml
-	 * @param fsw
-	 *          the fsw
-	 * @param dsw
-	 *          the dsw
+	 *
+	 * @param storageDir the storage dir
+	 * @param workingDir the working dir
+	 * @param valSBML the val sbml
+	 * @param valCellMl the val cell ml
+	 * @param fsw the fsw
+	 * @param dsw the dsw
+	 * @param comodiTerms the comodi terms
 	 */
 	public RepositoryProcessor (File storageDir, File workingDir,
 		SBMLValidator valSBML, CellMLValidator valCellMl, FileStatsWriter fsw,
-		DiffStatsWriter dsw)
+		DiffStatsWriter dsw, Map<String, ComodiTermCounter> comodiTerms)
 	{
 		this.info = new InfoJs (valSBML, valCellMl);
 		
@@ -93,6 +93,8 @@ public class RepositoryProcessor
 		this.dsw = dsw;
 		
 		this.modelVersions = new ArrayList<Date> ();
+		
+		this.comodiTerms = comodiTerms;
 	}
 	
 	
@@ -305,6 +307,23 @@ public class RepositoryProcessor
 			dr.setBivesDeletes (patch.getNumDeletes ());
 			dr.setBivesMoves (patch.getNumMoves ());
 			dr.setBivesUpdates (patch.getNumUpdates ());
+			
+			for (Change change: patch.getAnnotations ().getChanges ())
+				for (Statement s : change.getStatements ())
+					if (s.getObject ().toString ().contains ("comodi"))
+					{
+						//System.out.println (s.getObject ().toString ());
+						ComodiTermCounter ctc = comodiTerms.get (s.getObject ().toString ());
+						if (ctc == null)
+						{
+							ctc = new ComodiTermCounter (s.getObject ().toString ());
+							comodiTerms.put (s.getObject ().toString (), ctc);
+						}
+						if (originalVersion.isSbml ())
+							ctc.nSBML++;
+						if (originalVersion.isCellml ())
+							ctc.nCellMl++;
+					}
 			
 			Element e = patch.getDeletes ();
 			for (Element el : e.getChildren ())
