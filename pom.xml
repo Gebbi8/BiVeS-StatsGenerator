@@ -3,7 +3,7 @@
 
     <groupId>de.unirostock.sems</groupId>
     <artifactId>BiVeS-statsgenerator</artifactId>
-    <version>0.4.3</version>
+    <version>0.4.4</version>
     <packaging>jar</packaging>
 
     <name>BiVeS-statsgenerator</name>

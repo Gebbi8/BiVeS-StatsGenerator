@@ -28,6 +28,9 @@ import de.binfalse.bflog.LOGGER;
  */
 public class MeanNumNodesCalculator
 {
+
+	public static final int REPO_BIOMODELS = 1;
+	public static final int REPO_PMR = 2;
 	
 	/**
 	 * @author martin
@@ -102,42 +105,32 @@ public class MeanNumNodesCalculator
 		int	species, reactions, compartments, functions, parameters, rules, events;
 		
 		/** The type. */
-		String	date, file, type;
+		String	date, file, type, url;
+		
+		int repository;
 		
 		
 		/**
 		 * Instantiates a new line.
-		 * 
-		 * @param nodes
-		 *          the nodes
-		 * @param species
-		 *          the species
-		 * @param reactions
-		 *          the reactions
-		 * @param compartments
-		 *          the compartments
-		 * @param functions
-		 *          the functions
-		 * @param parameters
-		 *          the parameters
-		 * @param rules
-		 *          the rules
-		 * @param events
-		 *          the events
-		 * @param units
-		 *          the units
-		 * @param variables
-		 *          the variables
-		 * @param components
-		 *          the components
-		 * @param type
-		 *          the type
-		 * @param date
-		 *          the date
+		 *
+		 * @param nodes the nodes
+		 * @param species the species
+		 * @param reactions the reactions
+		 * @param compartments the compartments
+		 * @param functions the functions
+		 * @param parameters the parameters
+		 * @param rules the rules
+		 * @param events the events
+		 * @param units the units
+		 * @param variables the variables
+		 * @param components the components
+		 * @param type the type
+		 * @param date the date
+		 * @param url the url
 		 */
 		public Line (int nodes, int species, int reactions, int compartments,
 			int functions, int parameters, int rules, int events, int units,
-			int variables, int components, String type, String date)
+			int variables, int components, String type, String date, String url)
 		{
 			super ();
 			this.nodes = nodes;
@@ -153,6 +146,16 @@ public class MeanNumNodesCalculator
 			this.parameters = parameters;
 			this.rules = rules;
 			this.events = events;
+			this.url = url;
+			if (url.contains ("d3d3LmViaS5hYy51ay9iaW9tb2RlbHMtbWFpbi8"))
+				this.repository = REPO_BIOMODELS;
+			else if (url.contains ("bW9kZWxzLmNlbGxtbC5vcmcv"))
+				this.repository = REPO_PMR;
+			else
+			{
+				LOGGER.error ("don't know which repository: " + url);
+				throw new RuntimeException ("don't know which repository: " + url);
+			}
 		}
 	}
 	
@@ -276,7 +279,7 @@ public class MeanNumNodesCalculator
 						.parseInt (line[4]), Integer.parseInt (line[5]), Integer
 						.parseInt (line[6]), Integer.parseInt (line[7]), Integer
 						.parseInt (line[8]), Integer.parseInt (line[9]), Integer
-						.parseInt (line[10]), line[12], line[13]));
+						.parseInt (line[10]), line[12], line[13], line[17]));
 			dates.add (line[13]);
 		}
 		br.close ();
@@ -289,8 +292,8 @@ public class MeanNumNodesCalculator
 		
 		for (String date : dates)
 		{
-			SumLine sbml = new SumLine ();
-			SumLine cellml = new SumLine ();
+			SumLine biomodels = new SumLine ();
+			SumLine pmr = new SumLine ();
 			SumLine all = new SumLine ();
 			for (File f : files.values ())
 			{
@@ -299,13 +302,14 @@ public class MeanNumNodesCalculator
 				{
 					all.add (latest);
 					
-					if (latest.type.contains ("SBML"))
+					if (latest.repository == REPO_BIOMODELS)
 					{
-						sbml.add (latest);
+						// d3d3LmViaS5hYy51ay9iaW9tb2RlbHMtbWFpbi8 = base64 (www.ebi.ac.uk/biomodels-main/)
+						biomodels.add (latest);
 					}
 					else
 					{
-						cellml.add (latest);
+						pmr.add (latest);
 					}
 					/*
 					 * numNodes += latest.nodes;
@@ -318,10 +322,10 @@ public class MeanNumNodesCalculator
 			}
 			
 			bw.write (date + "\tALL\t" + all + LOGGER.NEWLINE);
-			bw.write (date + "\tCellML\t" + cellml + LOGGER.NEWLINE);
-			if (prevSbml == null || !prevSbml.equals (sbml))
-				bw.write (date + "\tSBML\t" + sbml + LOGGER.NEWLINE);
-			prevSbml = sbml;
+			bw.write (date + "\tPMR2\t" + pmr + LOGGER.NEWLINE);
+			if (prevSbml == null || !prevSbml.equals (biomodels))
+				bw.write (date + "\tBIOMODELS\t" + biomodels + LOGGER.NEWLINE);
+			prevSbml = biomodels;
 		}
 		bw.close ();
 	}
@@ -337,7 +341,7 @@ public class MeanNumNodesCalculator
 	 */
 	public static void main (String[] args) throws IOException
 	{
-		String STORAGE = "/srv/modelcrawler/storage";
+		String STORAGE = "/tmp/stats-storage";
 		
 		MeanNumNodesCalculator.run (STORAGE + "/stats/filestats", STORAGE
 			+ "/stats/repo-evolution");
