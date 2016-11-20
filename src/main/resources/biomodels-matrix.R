@@ -84,12 +84,13 @@ dev.off()
 
 m2=log(m)
 m2[is.infinite(m2)]=0
-pdf ("./data/graphs/Biomodels/MATRIXFILE-log.pdf", width=9, height=6)
+pdf ("./data/graphs/Biomodels/MATRIXFILE-log.pdf", width=9, height=5.5)
 
-oldpar=par(mar=c(8,4,0.2,5.2)+.1,mfrow=c(1,1))
+oldpar=par(mar=c(5.1,4,0.2,5.2)+.1,mfrow=c(1,1))
 image(m2, xaxt = "n", yaxt = "n", xlab="",col=colorRampPalette(c("#ffffff", "#0040ff"))( 12 ))#,legend.only = T)
 # modelTiks=models[seq(1, length(models), 20)]
 modelTiks=sapply(models[seq(1, length(models), 20)], substr, 2, 16)
+modelTiks=gsub("000000", "", modelTiks)
 axis(1, at=(0:(length(modelTiks)-1))/(length(modelTiks)-1),labels=modelTiks,las=2,cex.axis=.9)
 axis(2, at=(0:(length(dates)-1))/(length(dates)-1),labels=format(dates, "%b %y"),las=2,cex.axis=.9)
 
