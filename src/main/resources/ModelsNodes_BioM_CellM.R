@@ -15,11 +15,10 @@ nb_nodes_cell = CellMl[,4]/nb_models_cell
 nb_nodes_cell <- replace(nb_nodes_cell, is.na(nb_nodes_cell), 0)
 
 
-# dates from the Biomodels versions for the x axis in the plot - remove Apr 2010 for clarity of the plot.
-dates = unique(Biomodels[,1])
-dates = dates[-16]
+dates = sort (c(unique(Biomodels[,1]), unique(CellMl[,1])))
+dates <- seq(dates[1], dates[length(dates)], by=14*30)
 
-dates <- c(dates[seq(1, length(dates), 3)], dates[30])
+
 
 #Plot:
 pdf ("./data/graphs/nbModels_avgNodes.pdf", width=9, height=4.5)
@@ -33,7 +32,7 @@ oldpar=par(oma=c(0,0,0,0),mar=c(4,4,0,1) + 0.1,mfrow=c(1,2))
 
 
 # Plot the trend in the number of models in Biomodels and Physiome Model repositories over the time:
-plot(nb_models_bio ~ Biomodels[,1],  cex=2, axes=FALSE, type = "l",ylab="#models", col='blue', xlab="", lwd=2, ylim=c(0,max(max(nb_models_bio),max(nb_models_cell))))
+plot(nb_models_bio ~ Biomodels[,1],  cex=2, axes=FALSE, type = "l",ylab="#Models in the Repository", col='blue', xlab="", lwd=2, ylim=c(0,max(max(nb_models_bio),max(nb_models_cell))))
 
 mtext("Time", side=1, line=4)
 axis(1, at=dates,format(dates, "%b %y"),las=2,cex.axis=.9)
@@ -46,7 +45,7 @@ par(new=TRUE)
 
 
 
-par(oma=c(0,0,0,0),mar=c(4,1,0,4) + 0.1,mfrow=c(1,2))
+par(oma=c(0,0,0,0),mar=c(4,1,0,5) + 0.1,mfrow=c(1,2))
 
 
 
@@ -54,7 +53,7 @@ plot(nb_nodes_biom ~ Biomodels[,1] ,ylab="", xlab="", axes=FALSE,type='l', col =
 mtext("Time", side=1, line=4)
 axis(1, at=dates,format(dates, "%b %y"),las=2,cex.axis=.9)
 axis(4, ylim=c(0,max(nb_nodes_biom, nb_nodes_cell)),col="black",las=1) 
-mtext("Avg #nodes per model",side=4,line=4) 
+mtext("Avgarage #Nodes per Model",side=4,line=4) 
 lines(CellMl[,1], nb_nodes_cell, type='l', col='red', lwd=2)
 
 
