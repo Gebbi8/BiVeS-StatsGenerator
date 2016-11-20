@@ -114,41 +114,46 @@ allinone<-function (SBML, CellML)
 	pdf ("./data/graphs/boxes/allinone.pdf",width=8,height=7)
 	
 	
-	oldpar=par(mar=c(7,1.3,0.2,0)+.1,mfrow=c(1,4))
+	oldpar=par(mar=c(10.5,1.3,0.2,0)+.1,mfrow=c(1,4))
 	
 	boxplot(updatesSBML,deletesSBML,insertsSBML,movesSBML,horizontal=F,log='y',ylim=c(1,1000),
 					#names=c("updates","deletes","inserts","moves","nodes","attributes","texts"),
 					col=c("#FFFA5F","#f47e7d","#b5d045","#83C5D1"), yaxt='n')
-	axis(1, at=1:4,c("updates","deletes","inserts","moves"),las=2,cex.axis=.9)
+	axis(1, at=1:4,c("updates","deletes","inserts","moves"),las=2,cex.axis=1.5)
+# 	axis(1, at=1:4, labels = FALSE)
+# 	text(1:4-.5, par("usr")[1] + 0.2, labels = c("updates","deletes","inserts","moves"), srt = 30, pos = 1, xpd = TRUE)
+	
 # 	par(oldpar)
 	
 	
-	par(mar=c(7,0,0.2,1.3)+.1)
-	boxplot(updatesCellML,deletesCellML,insertsCellML,movesCellML,horizontal=F,log='y',ylim=c(1,1000),
+	par(mar=c(10.5,0,0.2,1.3)+.1)
+# 	oldpar=par(mar=c(2,6.5,0.2,0)+.1,mfrow=c(1,1))
+	boxplot(nodesSBML,attributesSBML,textsSBML,horizontal=F,log='y',ylim=c(1,1000),
 					#names=c("updates","deletes","inserts","moves","nodes","attributes","texts"),
-					col=c("#FFFA5F","#f47e7d","#b5d045","#83C5D1"), yaxt='n')
-	axis(1, at=1:4,c("updates","deletes","inserts","moves"),las=2,cex.axis=.9)
+					col=c("#cccccc","#fb8335","#c2a5cf"), yaxt='n')
+	axis(1, at=1:3,c("document nodes","attributes","text nodes"),las=2,cex.axis=1.5)
 	# 	par(oldpar)
+# 	axis(1, at=1:3, labels = FALSE)
+# 	text(1:3-.2, par("usr")[1] + 0.2, labels = c("document nodes","           attributes","       text nodes"), srt = 60, pos = 1, xpd = TRUE)
 	
 	axis(4,labels=F)
 	
 	
 	
 	
-	par(mar=c(7,1.3,0.2,0)+.1)
-# 	oldpar=par(mar=c(2,6.5,0.2,0)+.1,mfrow=c(1,1))
-	boxplot(nodesSBML,attributesSBML,textsSBML,horizontal=F,log='y',ylim=c(1,1000),
+	par(mar=c(10.5,1.3,0.2,0)+.1)
+	boxplot(updatesCellML,deletesCellML,insertsCellML,movesCellML,horizontal=F,log='y',ylim=c(1,1000),
 					#names=c("updates","deletes","inserts","moves","nodes","attributes","texts"),
-					col=c("#81c0c5","#fb8335","#f9c8ea"))
-	axis(1, at=1:3,c("document nodes","attributes","text nodes"),las=2,cex.axis=.9)
+					col=c("#FFFA5F","#f47e7d","#b5d045","#83C5D1"))
+	axis(1, at=1:4,c("updates","deletes","inserts","moves"),las=2,cex.axis=1.5)
 	
 	
-	par(mar=c(7,0,0.2,1.3)+.1)
+	par(mar=c(10.5,0,0.2,1.3)+.1)
 	# 	oldpar=par(mar=c(2,6.5,0.2,0)+.1,mfrow=c(1,1))
 	boxplot(nodesCellML,attributesCellML,textsCellML,horizontal=F,log='y',ylim=c(1,1000),
 					#names=c("updates","deletes","inserts","moves","nodes","attributes","texts"),
-					col=c("#81c0c5","#fb8335","#f9c8ea"), yaxt='n')
-	axis(1, at=1:3,c("document nodes","attributes","text nodes"),las=2,cex.axis=.9)
+					col=c("#cccccc","#fb8335","#c2a5cf"), yaxt='n')
+	axis(1, at=1:3,c("document nodes","attributes","text nodes"),las=2,cex.axis=1.5)
 	
 	
 	
