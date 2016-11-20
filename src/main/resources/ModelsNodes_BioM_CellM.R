@@ -4,12 +4,12 @@ files[,1] = as.Date(files[,1], "%Y-%m-%d")
 
 
 # Biomodels data: evolution of the number of models + average number of nodes.
-Biomodels=files[files[,2]=="SBML",]
+Biomodels=files[files[,2]=="BIOMODELS",]
 nb_models_bio=Biomodels[,3]
 nb_nodes_biom = Biomodels[,4]/nb_models_bio
 
 #CellML data: evolution of number of models + average number of nodes.
-CellMl = files[files[,2]=="CellML",]
+CellMl = files[files[,2]=="PMR2",]
 nb_models_cell = CellMl[,3]
 nb_nodes_cell = CellMl[,4]/nb_models_cell
 nb_nodes_cell <- replace(nb_nodes_cell, is.na(nb_nodes_cell), 0)
