@@ -41,7 +41,13 @@ public class ColorizeComodi
 		// will write the colorized map to /tmp/colorized-comodi-figure.svg
 		// TODO: implement parser for cmd arguments to allow for different paths?
 		
-		new ColorizeComodi ().run ();
+
+		File out = new File ("/tmp/colorized-comodi-figure.svg");
+		if (out.exists ())
+			throw new IOException (out + " exists. will not overwrite it..");
+		
+		ColorizeComodi coloCom = new ColorizeComodi ();
+		coloCom.run (coloCom.getClass ().getResourceAsStream("/data/comodi-terms"), coloCom.getClass ().getResourceAsStream("/comodi-fig.svg"), out);
 	}
 
 	final static int TYPE_CHANGE = 0;
@@ -93,7 +99,17 @@ public class ColorizeComodi
 		
 	}
 	
-	public void run () throws IOException, XmlDocumentParseException, JDOMException
+	/**
+	 * Run the colorizer.
+	 *
+	 * @param comodiTerms the stream with comodi terms
+	 * @param comodiFigTemplate the template SVG figure to be colorised
+	 * @param comodiColorizedFigure the colorized figure to write
+	 * @throws IOException the IO exception
+	 * @throws XmlDocumentParseException the xml document parse exception
+	 * @throws JDOMException the JDOM exception
+	 */
+	public void run (InputStream comodiTerms, InputStream comodiFigTemplate, File comodiColorizedFigure) throws IOException, XmlDocumentParseException, JDOMException
 	{
 		maxOverall = new double [3];
 		maxSbml = new double [3];
@@ -106,8 +122,8 @@ public class ColorizeComodi
 		Map<String, ComodiCoverage> coverage = new HashMap<String, ComodiCoverage> ();
 		
 		// read the coverage as it was detected by the stats generator
-		InputStream in = getClass().getResourceAsStream("/data/comodi-terms"); 
-		BufferedReader reader = new BufferedReader(new InputStreamReader (in));
+//		InputStream in = getClass().getResourceAsStream("/data/comodi-terms"); 
+		BufferedReader reader = new BufferedReader(new InputStreamReader (comodiTerms));
 		while (reader.ready ())
 		{
 			String [] line = reader.readLine ().split ("\t");
@@ -130,7 +146,8 @@ public class ColorizeComodi
 		
 		
 		// update the SVG figure
-		TreeDocument svg = new TreeDocument (XmlTools.readDocument (getClass().getResourceAsStream("/comodi-fig.svg")), null);
+		TreeDocument svg = new TreeDocument (XmlTools.readDocument (comodiFigTemplate), null);
+//		TreeDocument svg = new TreeDocument (XmlTools.readDocument (getClass().getResourceAsStream("/comodi-fig.svg")), null);
 //		for (DocumentNode dn : svg.getNodesByTag ("ellipse"))
 //		{
 //			String style = dn.getAttributeValue ("style");
@@ -152,10 +169,8 @@ public class ColorizeComodi
 				System.err.println ("did not find " + term);
 		}
 		
-		File out = new File ("/tmp/colorized-comodi-figure.svg");
-		if (out.exists ())
-			throw new IOException (out + " exists. will not overwrite it..");
-		GeneralTools.stringToFile (XmlTools.prettyPrintDocument (DocumentTools.getDoc (svg)), out);
+		
+		GeneralTools.stringToFile (XmlTools.prettyPrintDocument (DocumentTools.getDoc (svg)), comodiColorizedFigure);
 		
 	}
 	
