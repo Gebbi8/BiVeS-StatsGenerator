@@ -2,6 +2,7 @@ package de.unirostock.sems.bives.statsgenerator;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,6 +19,7 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.jdom2.JDOMException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -29,11 +31,13 @@ import de.unirostock.sems.ModelCrawler.databases.Interface.Change;
 import de.unirostock.sems.ModelCrawler.databases.Interface.ChangeSet;
 import de.unirostock.sems.bives.cellml.algorithm.CellMLValidator;
 import de.unirostock.sems.bives.sbml.algorithm.SBMLValidator;
+import de.unirostock.sems.bives.statsgenerator.algorithm.ColorizeComodi;
 import de.unirostock.sems.bives.statsgenerator.algorithm.MeanNumNodesCalculator;
 import de.unirostock.sems.bives.statsgenerator.algorithm.RepositoryProcessor;
 import de.unirostock.sems.bives.statsgenerator.ds.ComodiTermCounter;
 import de.unirostock.sems.bives.statsgenerator.io.DiffStatsWriter;
 import de.unirostock.sems.bives.statsgenerator.io.FileStatsWriter;
+import de.unirostock.sems.xmlutils.exception.XmlDocumentParseException;
 
 
 
@@ -199,7 +203,8 @@ public class App
 		MeanNumNodesCalculator.run (storageDir + "/stats/filestats-" + date, storageDir + "/stats/repo-evolution-" + date);
 		
 		// dump comodi terms
-		BufferedWriter bw = new BufferedWriter (new FileWriter (storageDir + "/stats/comodi-terms-" + date));
+		File comodiTermsFile = new File (storageDir + "/stats/comodi-terms-" + date);
+		BufferedWriter bw = new BufferedWriter (new FileWriter (comodiTermsFile));
 		for (String term: comodiTerms.keySet ())
 		{
 			ComodiTermCounter ctc = comodiTerms.get (term);
@@ -207,6 +212,19 @@ public class App
 			bw.newLine ();
 		}
 		bw.close ();
+		
+		// create comodi figure
+		File comodiTermsFileSvg = new File (storageDir + "/stats/comodi-terms-" + date + ".svg");
+		ColorizeComodi coloCom = new ColorizeComodi ();
+		try
+		{
+			coloCom.run (new FileInputStream (comodiTermsFile), coloCom.getClass ().getResourceAsStream("/comodi-fig.svg"), comodiTermsFileSvg);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			LOGGER.error (e, "could not colorize the COMODI map from ", comodiTermsFile, " to ", comodiTermsFileSvg);
+		}
 		
 		System.out.println ("done doing statistics");
 		System.out.println ("startMillis " + startMillis);
