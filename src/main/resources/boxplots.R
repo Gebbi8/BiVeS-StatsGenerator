@@ -120,21 +120,21 @@ allinone<-function (SBML, CellML)
 					#names=c("updates","deletes","inserts","moves","nodes","attributes","texts"),
 					col=c("#FFFA5F","#f47e7d","#b5d045","#83C5D1"), yaxt='n')
 	axis(1, at=1:4,c("updates","deletes","inserts","moves"),las=2,cex.axis=1.5)
-# 	axis(1, at=1:4, labels = FALSE)
-# 	text(1:4-.5, par("usr")[1] + 0.2, labels = c("updates","deletes","inserts","moves"), srt = 30, pos = 1, xpd = TRUE)
+	# 	axis(1, at=1:4, labels = FALSE)
+	# 	text(1:4-.5, par("usr")[1] + 0.2, labels = c("updates","deletes","inserts","moves"), srt = 30, pos = 1, xpd = TRUE)
 	
-# 	par(oldpar)
+	# 	par(oldpar)
 	
 	
 	par(mar=c(10.5,0,0.2,1.3)+.1)
-# 	oldpar=par(mar=c(2,6.5,0.2,0)+.1,mfrow=c(1,1))
+	# 	oldpar=par(mar=c(2,6.5,0.2,0)+.1,mfrow=c(1,1))
 	boxplot(nodesSBML,attributesSBML,textsSBML,horizontal=F,log='y',ylim=c(1,1000),
 					#names=c("updates","deletes","inserts","moves","nodes","attributes","texts"),
 					col=c("#cccccc","#fb8335","#c2a5cf"), yaxt='n')
 	axis(1, at=1:3,c("document nodes","attributes","text nodes"),las=2,cex.axis=1.5)
 	# 	par(oldpar)
-# 	axis(1, at=1:3, labels = FALSE)
-# 	text(1:3-.2, par("usr")[1] + 0.2, labels = c("document nodes","           attributes","       text nodes"), srt = 60, pos = 1, xpd = TRUE)
+	# 	axis(1, at=1:3, labels = FALSE)
+	# 	text(1:3-.2, par("usr")[1] + 0.2, labels = c("document nodes","           attributes","       text nodes"), srt = 60, pos = 1, xpd = TRUE)
 	
 	axis(4,labels=F)
 	
@@ -154,6 +154,66 @@ allinone<-function (SBML, CellML)
 					#names=c("updates","deletes","inserts","moves","nodes","attributes","texts"),
 					col=c("#cccccc","#fb8335","#c2a5cf"), yaxt='n')
 	axis(1, at=1:3,c("document nodes","attributes","text nodes"),las=2,cex.axis=1.5)
+	
+	
+	
+	
+	
+	par(oldpar)
+	
+	dev.off()
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	pdf ("./data/graphs/boxes/allinone-h.pdf",width=10,height=7)
+	
+	
+	oldpar=par(mar=c(0,11,1.5,0)+.1,mfrow=c(4,1))
+	
+	boxplot(updatesSBML,deletesSBML,insertsSBML,movesSBML,horizontal=T,log='x',ylim=c(1,1000),
+					#names=c("updates","deletes","inserts","moves","nodes","attributes","texts"),
+					col=c("#FFFA5F","#f47e7d","#b5d045","#83C5D1"), xaxt='n')
+	axis(2, at=1:4,c("updates","deletes","inserts","moves"),las=2,cex.axis=1.5)
+# 	axis(1, at=1:4, labels = FALSE)
+# 	text(1:4-.5, par("usr")[1] + 0.2, labels = c("updates","deletes","inserts","moves"), srt = 30, pos = 1, xpd = TRUE)
+	
+# 	par(oldpar)
+	
+	
+	par(mar=c(1.3,11,0,0)+.1)
+# 	oldpar=par(mar=c(2,6.5,0.2,0)+.1,mfrow=c(1,1))
+	boxplot(nodesSBML,attributesSBML,textsSBML,horizontal=T,log='x',ylim=c(1,1000),
+					#names=c("updates","deletes","inserts","moves","nodes","attributes","texts"),
+					col=c("#cccccc","#fb8335","#c2a5cf"))
+	axis(2, at=1:3,c("document nodes","attributes","text nodes"),las=2,cex.axis=1.5)
+	# 	par(oldpar)
+# 	axis(1, at=1:3, labels = FALSE)
+# 	text(1:3-.2, par("usr")[1] + 0.2, labels = c("document nodes","           attributes","       text nodes"), srt = 60, pos = 1, xpd = TRUE)
+	
+	
+	
+	
+	
+	par(mar=c(0,11,1.3,0)+.1)
+	boxplot(updatesCellML,deletesCellML,insertsCellML,movesCellML,horizontal=T,log='x',ylim=c(1,1000),
+					#names=c("updates","deletes","inserts","moves","nodes","attributes","texts"),
+					col=c("#FFFA5F","#f47e7d","#b5d045","#83C5D1"), xaxt='n')
+	axis(2, at=1:4,c("updates","deletes","inserts","moves"),las=2,cex.axis=1.5)
+	axis(3,labels=F)
+	
+	
+	par(mar=c(1.3,11,0,0)+.1)
+	# 	oldpar=par(mar=c(2,6.5,0.2,0)+.1,mfrow=c(1,1))
+	boxplot(nodesCellML,attributesCellML,textsCellML,horizontal=T,log='x',ylim=c(1,1000),
+					#names=c("updates","deletes","inserts","moves","nodes","attributes","texts"),
+					col=c("#cccccc","#fb8335","#c2a5cf"), xaxt='n')
+	axis(2, at=1:3,c("document nodes","attributes","text nodes"),las=2,cex.axis=1.5)
 	
 	
 	
