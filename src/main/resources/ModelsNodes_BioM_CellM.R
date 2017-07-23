@@ -16,7 +16,7 @@ nb_nodes_cell <- replace(nb_nodes_cell, is.na(nb_nodes_cell), 0)
 
 
 dates = sort (c(unique(Biomodels[,1]), unique(CellMl[,1])))
-dates <- seq(dates[1], dates[length(dates)], by=14*30)
+dates <- c(seq(dates[1], dates[length(dates)], by=15*30), dates[length(dates)])
 
 
 
