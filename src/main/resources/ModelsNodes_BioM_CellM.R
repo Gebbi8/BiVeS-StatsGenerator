@@ -32,12 +32,12 @@ oldpar=par(oma=c(0,0,0,0),mar=c(4,4,0,1) + 0.1,mfrow=c(1,2))
 
 
 # Plot the trend in the number of models in Biomodels and Physiome Model repositories over the time:
-plot(nb_models_bio ~ Biomodels[,1],  cex=2, axes=FALSE, type = "l",ylab="#Models in the Repository", col='blue', xlab="", lwd=2, ylim=c(0,max(max(nb_models_bio),max(nb_models_cell))),xlim=c(min(min(Biomodels[,1]),min(CellMl[,1])),max(max(Biomodels[,1]),max(CellMl[,1]))))
+plot(nb_models_bio ~ Biomodels[,1],  cex=2, axes=FALSE, type = "l",ylab="#Models in the Repository", col='blue', xlab="", lwd=2, ylim=c(0,max(max(nb_models_bio),max(nb_models_cell))),xlim=c(min(min(Biomodels[,1]),min(CellMl[,1])),max(max(Biomodels[,1]),max(CellMl[,1]))),  lty=6)
 
 mtext("Time", side=1, line=4)
 axis(1, at=dates,format(dates, "%b %y"),las=2,cex.axis=.9)
 axis(2, ylim=c(0,max(nb_models_bio, nb_models_cell)),col="black",las=1) 
-lines(CellMl[,1],nb_models_cell, type = "l", col='red', lwd=2, pch=5)
+lines(CellMl[,1],nb_models_cell, type = "l", col='red', lwd=2)
 
 
 # Plot the mean number of nodes in the Biomodels and Physiome Model repositories models over time
@@ -49,7 +49,7 @@ par(oma=c(0,0,0,0),mar=c(4,1,0,5) + 0.1,mfrow=c(1,2))
 
 
 
-plot(nb_nodes_biom ~ Biomodels[,1] ,ylab="", xlab="", axes=FALSE,type='l', col = 'blue', ylim=c(0,max(nb_nodes_cell, nb_nodes_biom)),xlim=c(min(min(Biomodels[,1]),min(CellMl[,1])),max(max(Biomodels[,1]),max(CellMl[,1]))), lwd=2)
+plot(nb_nodes_biom ~ Biomodels[,1] ,ylab="", xlab="", axes=FALSE,type='l', col = 'blue', ylim=c(0,max(nb_nodes_cell, nb_nodes_biom)),xlim=c(min(min(Biomodels[,1]),min(CellMl[,1])),max(max(Biomodels[,1]),max(CellMl[,1]))), lwd=2,  lty=6)
 mtext("Time", side=1, line=4)
 axis(1, at=dates,format(dates, "%b %y"),las=2,cex.axis=.9)
 axis(4, ylim=c(0,max(nb_nodes_biom, nb_nodes_cell)),col="black",las=1) 
@@ -64,7 +64,7 @@ lines(CellMl[,1], nb_nodes_cell, type='l', col='red', lwd=2)
 
 
 
-legend(x = "topleft",inset = 0, legend = c("BioModels", "Physiome"), col=c(4,2), lwd=2, cex=0.7)
+legend(x = "topleft",inset = 0, legend = c("BioModels", "PMR"), col=c(4,2), lwd=2, cex=1.3,lty=c(6,1))
 
 
 par(oldpar)
