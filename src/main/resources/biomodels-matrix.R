@@ -100,3 +100,46 @@ image.plot(m2, xaxt = "n", yaxt = "n", xlab="",col=colorRampPalette(c("#ffffff",
 par(oldpar)
 
 dev.off()
+
+
+
+
+
+pdf ("./data/graphs/Biomodels/MATRIXFILE-log-legend.pdf", width=9, height=5.5)
+
+oldpar=par(mar=c(5.1,4,0.2,6.2)+.1,mfrow=c(1,1))
+
+
+image(m2, xaxt = "n", yaxt = "n", xlab="",col=colorRampPalette(c("#ffffff", "#0040ff"))( 12 ))
+#,legend.only = T)
+# modelTiks=models[seq(1, length(models), 20)]
+modelTiks=sapply(models[seq(1, length(models), 20)], substr, 2, 16)
+modelTiks=gsub("000000", "", modelTiks)
+# modelTiks=gsub("000", "···", modelTiks)
+# modelTiks=gsub("00", "··", modelTiks)
+# modelTiks=gsub("D0", "D·", modelTiks)
+axis(1, at=(0:(length(modelTiks)-1))/(length(modelTiks)-1),labels=modelTiks,las=2,cex.axis=.9)
+axis(2, at=(0:(length(dates)-1))/(length(dates)-1),labels=format(dates, "%b %y"),las=2,cex.axis=.9)
+
+ticks<- c(5, 10, 50, 100, 500, 1000, 5000, max(m))
+image.plot(m2, xaxt = "n", yaxt = "n", ylab="",col=colorRampPalette(c("#ffffff", "#0040ff"))( 12 ),legend.only = T,legend.width = 1, axis.args=list( at=c(0,log(ticks)), labels=c(0,ticks)), legend.lab="Number of differences",legend.mar=6,legend.line=3.5)
+#list( at=0:log(max(m)), labels=c(0,exp(1:8))))
+# text(0,0, "test")
+
+
+par(oldpar)
+
+dev.off()
+
+
+
+
+
+
+
+
+
+
+
+
+

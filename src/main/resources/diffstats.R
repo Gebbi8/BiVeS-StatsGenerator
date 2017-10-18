@@ -30,10 +30,10 @@ diffstats=read.table("./data/diffstats", header=T)
 # matrix[,19] = as.Date(matrix[,19], "%s")
 
 
-biomodels_curated=diffstats[grepl("^B", diffstats[,17]),]
-biomodels_noncurated=diffstats[grepl("^M", diffstats[,17]),]
-biomodels_all=diffstats[!grepl("http", diffstats[,17]),]
-cellml=diffstats[grepl("http", diffstats[,17]),]
+biomodels_curated=diffstats[grepl("^/B", diffstats[,17])&diffstats[,16]=="SBML",]
+biomodels_noncurated=diffstats[!grepl("^/B", diffstats[,17])&diffstats[,16]=="SBML",]
+biomodels_all=diffstats[diffstats[,16]=="SBML",]
+cellml=diffstats[diffstats[,16]=="CellML",]
 
 length (diffstats[,1])
 length(biomodels_curated[,1]) + length(cellml[,1])
@@ -222,9 +222,9 @@ dev.off()
 
 processDiffs(diffstats, "all", "./data/graphs/diffs/")
 
-processDiffs(biomodels_curated, "biomodels_curated", "./data/graphs/diffs/")
-processDiffs(biomodels_noncurated, "biomodels_noncurated", "./data/graphs/diffs/")
-processDiffs(biomodels_all, "biomodels_all", "./data/graphs/diffs/")
+processDiffs(biomodels_curated, "sbml_curated", "./data/graphs/diffs/")
+processDiffs(biomodels_noncurated, "sbml_noncurated", "./data/graphs/diffs/")
+processDiffs(biomodels_all, "sbml_all", "./data/graphs/diffs/")
 
 
 processDiffs(cellml, "cellml", "./data/graphs/diffs/")
