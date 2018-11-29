@@ -164,6 +164,13 @@ public class ModelVersion
 			String n = model.getName ();
 			return App.statsUrl + "resources/" + GeneralTools.encodeBase64 ("www.ebi.ac.uk/biomodels-main/".getBytes ()) + "/" + GeneralTools.encodeBase64 (n.substring (0, n.length () - 4).getBytes ()) + "/" + GeneralTools.encodeBase64 (getVersionId ().getBytes ());
 		}
+		else if(model.getId ().startsWith("urn:model::")) {
+			String m = model.getId ().substring (10).replaceAll (":", "/");
+			int excl = m.indexOf ("!");
+			String repo = m.substring (0, excl);
+			String model = m.substring (excl + 1);
+			return App.statsUrl + "resources/" + GeneralTools.encodeBase64 (repo.getBytes ()) + "/" + GeneralTools.encodeBase64 (model.getBytes ()) + "/" + GeneralTools.encodeBase64 (getVersionId ().getBytes ());
+		}
 		return "unknown";
 	}
 

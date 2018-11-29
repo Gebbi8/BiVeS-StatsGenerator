@@ -3,7 +3,7 @@
 
     <groupId>de.uni-rostock.sbi</groupId>
     <artifactId>BiVeS-statsgenerator</artifactId>
-    <version>0.6.1</version>
+    <version>0.7.0</version>
     <packaging>jar</packaging>
 
     <name>BiVeS-statsgenerator</name>
@@ -68,7 +68,7 @@
         <dependency>
         	<groupId>de.uni-rostock.sbi</groupId>
         	<artifactId>ModelCrawler</artifactId>
-        	<version>0.2.4</version>
+        	<version>0.3.0</version>
         </dependency>
     </dependencies>
     <distributionManagement>

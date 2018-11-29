@@ -31,6 +31,8 @@ public class MeanNumNodesCalculator
 
 	public static final int REPO_BIOMODELS = 1;
 	public static final int REPO_PMR = 2;
+	public static final int REPO_LD = 3;
+	
 	
 	/**
 	 * @author martin
@@ -151,8 +153,10 @@ public class MeanNumNodesCalculator
 				this.repository = REPO_BIOMODELS;
 			else if (url.contains ("bW9kZWxzLmNlbGxtbC5vcmcv"))
 				this.repository = REPO_PMR;
-			else
-			{
+			else if (url.contains("L3Zhci93d3cvaHRtbC9HaXRSZXBvcy9CZW5jaG1hcmstTW9kZWxzL0JlbmNobWFyay1Nb2RlbHMv"))
+				this.repository = REPO_LD;
+			else	{	
+				System.out.println(url);
 				LOGGER.error ("don't know which repository: " + url);
 				throw new RuntimeException ("don't know which repository: " + url);
 			}
@@ -294,6 +298,7 @@ public class MeanNumNodesCalculator
 		{
 			SumLine biomodels = new SumLine ();
 			SumLine pmr = new SumLine ();
+			SumLine ld = new SumLine ();
 			SumLine all = new SumLine ();
 			for (File f : files.values ())
 			{
@@ -307,9 +312,11 @@ public class MeanNumNodesCalculator
 						// d3d3LmViaS5hYy51ay9iaW9tb2RlbHMtbWFpbi8 = base64 (www.ebi.ac.uk/biomodels-main/)
 						biomodels.add (latest);
 					}
-					else
+					else if (latest.repository == REPO_PMR)
 					{
 						pmr.add (latest);
+					} else {
+						ld.add(latest);
 					}
 					/*
 					 * numNodes += latest.nodes;

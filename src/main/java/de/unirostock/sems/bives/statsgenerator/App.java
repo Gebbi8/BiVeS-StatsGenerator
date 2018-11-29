@@ -89,6 +89,7 @@ public class App
 		// to be provided on the command line...
 		String						STORAGE				= "/srv/modelstats/storage";
 		String						WORKING				= "/srv/modelstats/working";
+		String						CONFIGPATH			= null;
 		speed = false;
 		
 		Options options = new Options();
@@ -96,6 +97,7 @@ public class App
 		options.addOption("s", "storage", true, "set the storage location, defaults to " + STORAGE);
 		options.addOption("w", "working", true, "set the working directory, defaults to " + WORKING);
 		options.addOption("h", "help", false, "print this help message");
+		options.addOption("c", "help", true, "load a local config file");
 
 		try
 		{
@@ -108,6 +110,9 @@ public class App
 				WORKING = line.getOptionValue("w");
 			if (line.hasOption ("h"))
 				throw new org.apache.commons.cli.ParseException ("you need help");
+			if (line.hasOption ("c")) {
+				CONFIGPATH = line.getOptionValue("c");
+			}
 		}
 		catch (org.apache.commons.cli.ParseException exp)
 		{
@@ -137,7 +142,7 @@ public class App
 		LOGGER.setLogStackTrace (true);
 		
 		App app = new App (STORAGE, WORKING);
-		app.goForIt (STORAGE, WORKING);
+		app.goForIt (STORAGE, WORKING, CONFIGPATH);
 		
 		LOGGER.closeLogger ();
 	}
@@ -170,14 +175,20 @@ public class App
 	 * @throws ParseException signals problems with parsing the modelcrawlser's config
 	 */
 	@SuppressWarnings("unchecked")
-	public void goForIt (String storageDir, String workingDir) throws IOException, ParseException
+	public void goForIt (String storageDir, String workingDir, String configPath) throws IOException, ParseException
 	{
-		JSONObject json = (JSONObject) new JSONParser().parse(new InputStreamReader (getClass().getClassLoader().getResourceAsStream("modelcrawler.template")));
-		json.put("workingDir", workingDir);
-		((JSONObject) json.get("storage")).put("baseDir", storageDir);
-		File tmp = File.createTempFile("stats-generator-", ".bives");
-		tmp.deleteOnExit();
-		GeneralTools.stringToFile(json.toJSONString(), tmp);
+		File tmp; 
+		
+		if (configPath == null) {
+			JSONObject json = (JSONObject) new JSONParser().parse(new InputStreamReader (getClass().getClassLoader().getResourceAsStream("modelcrawler.template")));
+			json.put("workingDir", workingDir);
+			((JSONObject) json.get("storage")).put("baseDir", storageDir);
+			tmp = File.createTempFile("stats-generator-", ".bives");
+			tmp.deleteOnExit();
+			GeneralTools.stringToFile(json.toJSONString(), tmp);
+		} else {
+			tmp = new File (configPath);
+		}
 		
 		String [] crawlerArgs = new String [] {"-c", tmp.getAbsolutePath(), "--no-morre"};
 		new CrawlerAPI(crawlerArgs);
@@ -187,15 +198,31 @@ public class App
 		
 		String biomodelsSource = storageDir + "/ftp.ebi.ac.uk";
 		String biomodelsWorking = workingDir + "/biomodels-differ";
+		
 		String cellmlSource = storageDir + "/models.cellml.org";
 		String cellmlWorking = workingDir + "/cellml-differ";
 		
+		String localDirSource = storageDir + "/";
+		String localDirWorking = workingDir + "/";
+		
+		
 		// doing stats
 		long startMillis = System.currentTimeMillis ();
-		new RepositoryProcessor (new File (biomodelsSource), new File (biomodelsWorking), valSBML, valCellMl, fsw, dsw, comodiTerms).process ();
+		if(new File (biomodelsSource).listFiles() != null) {
+			new RepositoryProcessor (new File (biomodelsSource), new File (biomodelsWorking), valSBML, valCellMl, fsw, dsw, comodiTerms).process ();			
+		} else System.out.println("No BioModels source");
+
 		long firstStop = System.currentTimeMillis ();
-		new RepositoryProcessor (new File (cellmlSource), new File (cellmlWorking), valSBML, valCellMl, fsw, dsw, comodiTerms).process ();
+		if(new File (cellmlSource).listFiles() != null) {
+			new RepositoryProcessor (new File (cellmlSource), new File (cellmlWorking), valSBML, valCellMl, fsw, dsw, comodiTerms).process ();
+		} else System.out.println("No PMR2 source");
 		long secondStop = System.currentTimeMillis ();
+		
+		if(new File (localDirSource).listFiles() != null) {
+			new RepositoryProcessor (new File (localDirSource), new File (localDirWorking), valSBML, valCellMl, fsw, dsw, comodiTerms).process ();			
+		} else System.out.println("No local source");
+
+		long thirdStop = System.currentTimeMillis ();
 		fsw.close ();
 		dsw.close ();
 
@@ -230,6 +257,7 @@ public class App
 		System.out.println ("startMillis " + startMillis);
 		System.out.println ("firstStop " + firstStop);
 		System.out.println ("secondStop " + secondStop);
+		System.out.println ("thirdStop " + thirdStop);
 		
 		long time = firstStop - startMillis;
 		int seconds = (int) (time / 1000) % 60 ;
@@ -242,8 +270,14 @@ public class App
 		minutes = (int) ((time / (1000*60)) % 60);
 		hours   = (int) ((time / (1000*60*60)) % 24);
 		System.out.println ("cellml model repository took: " + time + "ms => " + hours + "h " + minutes + "m " + seconds + "s");
+
+		time = thirdStop - secondStop;
+		seconds = (int) (time / 1000) % 60 ;
+		minutes = (int) ((time / (1000*60)) % 60);
+		hours   = (int) ((time / (1000*60*60)) % 24);
+		System.out.println ("local model repository  took: " + time + "ms => " + hours + "h " + minutes + "m " + seconds + "s");		
 		
-		time = secondStop - startMillis;
+		time = thirdStop - startMillis;
 		seconds = (int) (time / 1000) % 60 ;
 		minutes = (int) ((time / (1000*60)) % 60);
 		hours   = (int) ((time / (1000*60*60)) % 24);
